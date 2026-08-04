@@ -29,6 +29,3 @@ Thumbs.db
 # Env / secrets
 *.env
 .env.local
-
-# Firebase local config (keep template, ignore local overrides)
-google-services.json
