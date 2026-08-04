@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:background="#081759">
+    <TextView
+        android:id="@+id/Firstlink_title_homepage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text = "FirstLink"
+        android:textSize="35sp"
+        android:textColor="#FFFFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/introtext"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginRight="190dp"
+        android:layout_marginBottom="150dp"
+        android:textStyle="bold"/>
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Firstlink_title_homepage"
+        app:layout_constraintBottom_toTopOf="@+id/introtext"
+        android:layout_marginRight="250dp"/>
+    <LinearLayout
+        android:id = "@+id/introtext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="150dp"
+        android:layout_marginRight="100dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text = "Help is already"
+            android:textSize="35sp"
+            android:textColor="#FFFFFFFF"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text = "in the room"
+            android:textSize="35sp"
+            android:textColor="#FFFFFFFF"/>
+    </LinearLayout>
+    <TextView
+        android:id = "@+id/description_home_page"
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:text = "Connect organizers with qualified attendees while emergency services are on the way"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/introtext"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginRight="60dp"
+        android:layout_marginBottom="270dp"
+        android:textColor="#959595"
+        />
+    <Button
+        android:layout_width="300dp"
+        android:layout_height="75dp"
+        android:text = "Join an Event"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/description_home_page"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:backgroundTint="#3F51B5"
+        android:id = "@+id/join_btn"
+        android:layout_marginBottom="130dp"/>
+
+    <Button
+        android:layout_width="300dp"
+        android:layout_height="75dp"
+        android:text = "Create an Event"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/join_btn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:backgroundTint="#42496B"
+        android:id = "@+id/create_btn"
+        android:layout_marginBottom="50dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
