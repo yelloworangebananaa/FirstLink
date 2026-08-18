@@ -1,5 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  Apple-inspired palette. Three principles drive every value here:
+  Clarity (content is king), Deference (UI serves content, never competes),
+  Depth (layering, not decoration, creates hierarchy).
+
+  The page is a soft neutral field and content floats on it in white cards - the grouped
+  pattern Monzo, Revolut and Starling all share. Type carries the hierarchy. Reds/greens are the *accessible* members of
+  Apple's system palette, not the vivid ones - every status colour here clears 4.5:1
+  against white so a safety-critical label is never the thing that fails a contrast check.
+-->
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Accent. The single colour the app spends on interaction. -->
+    <color name="brand_primary">#0071E3</color>
+    <color name="brand_primary_dark">#0058B8</color>
+    <color name="brand_primary_light">#3395E8</color>
+    <color name="brand_primary_container">#E8F2FD</color>
+    <color name="brand_on_primary_container">#0058B8</color>
+    <color name="brand_border_soft">#D2E3F7</color>
+
+    <!-- Header band tints. Superseded by bg_header_hero / bg_header_danger; kept because
+         removing them would mean editing layouts that still resolve against them. -->
+    <color name="gradient_hero_start">#F5F5F7</color>
+    <color name="gradient_hero_end">#F5F5F7</color>
+    <color name="gradient_danger_start">#FDECEC</color>
+    <color name="gradient_danger_end">#FDECEC</color>
+
+    <!-- Formerly "text on a gradient card". Those cards are light now, so these are simply
+         the on-light text ramp. Names kept so all 13 layouts keep resolving untouched. -->
+    <color name="on_gradient">#1D1D1F</color>
+    <color name="on_gradient_muted">#86868B</color>
+    <color name="on_gradient_faint">#A1A1A6</color>
+    <color name="on_gradient_pill">#FFFFFF</color>
+    <color name="on_gradient_hairline">#E3E3E8</color>
+
+    <!-- Formerly the dark frosted control bar. Now Apple's grouped-content surface: a
+         quiet inset panel that groups controls without shouting over the content. -->
+    <color name="frosted_dark_surface">#FFFFFF</color>
+    <color name="frosted_dark_border">#E3E3E8</color>
+    <color name="frosted_chip_fill">#EFEFF4</color>
+
+    <!-- Status. Accessible variants: white-on-fill clears 4.5:1 on all three. -->
+    <color name="danger">#D70015</color>
+    <color name="danger_dark_text">#A5000F</color>
+    <color name="danger_body_text">#7A000B</color>
+    <color name="danger_container">#FDECEC</color>
+    <color name="danger_border">#F7C9C9</color>
+
+    <color name="success">#248A3D</color>
+    <color name="success_container">#E9F7EC</color>
+    <color name="success_border">#C2E6CB</color>
+
+    <color name="warning">#B25000</color>
+    <color name="warning_dark_text">#8A4200</color>
+    <color name="warning_body_text">#8A4200</color>
+    <color name="warning_container">#FFF4E8</color>
+    <color name="warning_border">#F5DBBE</color>
+
+    <!-- Text ramp -->
+    <color name="text_primary">#1D1D1F</color>
+    <color name="text_body">#424245</color>
+    <color name="text_secondary">#86868B</color>
+    <color name="text_hint">#A1A1A6</color>
+
+    <!-- Surfaces -->
+    <color name="card_surface">#FFFFFF</color>
+    <color name="surface">#F2F2F7</color>
+    <color name="surface_alt">#FFFFFF</color>
+    <color name="border_light">#E3E3E8</color>
+
+    <!-- Shadow tint. Apple's shadow is neutral and barely there (0 4px 24px rgba(0,0,0,.06)) -
+         depth comes from a soft neutral lift, never a coloured bloom. Names kept from the
+         previous glow system so existing style references keep resolving. -->
+    <color name="brand_glow">#1D1D1F</color>
+    <color name="danger_glow">#1D1D1F</color>
+    <color name="success_glow">#1D1D1F</color>
+    <color name="card_glow">#1D1D1F</color>
+    <color name="glass_pill_glow">#1D1D1F</color>
+
+    <!-- Secondary "filled grey" control, Apple's standard non-primary button material. -->
+    <color name="glass_fill">#E9E9EE</color>
+    <color name="glass_ripple">#DEDEE3</color>
+
+    <!-- Hairlines. 5% ink, matching the card spec's 1px solid rgba(0,0,0,0.05). -->
+    <color name="glass_border">#0D000000</color>
+    <color name="glass_border_strong">#1F000000</color>
+
+    <!-- Dialogs sit above a genuinely blurred page (util/GlassBlur.java, API 31+), so the
+         surface stays a hair short of opaque and lets that blur read through. -->
+    <color name="dialog_glass_surface">#F2FFFFFF</color>
 </resources>

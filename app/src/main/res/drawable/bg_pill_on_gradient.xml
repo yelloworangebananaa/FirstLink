@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Inline highlight behind a single word of the headline. Accent-tinted rather than grey:
+     on a white page a grey pill reads as a selection artefact, a blue one reads as emphasis. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <corners android:radius="100dp" />
+    <solid android:color="@color/brand_primary_container" />
+</shape>

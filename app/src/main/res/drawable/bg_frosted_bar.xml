@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Grouped-content panel. Apple groups related controls on a quiet inset surface rather
+     than floating a distinct "glass" material over the page - the panel recedes and the
+     controls inside it are what you actually see. Flat by design: no sheen, no rim stack. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <corners android:radius="18dp" />
+    <solid android:color="@color/frosted_dark_surface" />
+</shape>

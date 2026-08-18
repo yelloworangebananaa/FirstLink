@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Page header zone. Monzo/Revolut/Starling all open with a distinct band at the top that
+     carries identity and status, with the neutral content field starting below it. This is
+     that band, dialled down to a soft accent tint so it frames the title instead of shouting. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <corners android:radius="22dp" />
+    <solid android:color="@color/brand_primary_container" />
+</shape>

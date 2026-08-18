@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Small label chip inside a grouped panel: white pill on the grey surface, one step up
+     the depth ladder rather than a separate material. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <corners android:radius="100dp" />
+    <solid android:color="@color/frosted_chip_fill" />
+</shape>

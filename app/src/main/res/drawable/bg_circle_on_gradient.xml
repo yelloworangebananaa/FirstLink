@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Circular badge (home logo mark, numbered step markers). Flat quiet fill - the icon or
+     numeral inside is the content, the badge is only there to give it a shape. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="@color/on_gradient_pill" />
+</shape>

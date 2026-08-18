@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-
+<!-- Data-dense row: deliberately plain white with a hairline border. No gradient here -
+     staff scan these under pressure and legibility beats decoration. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="18dp"
+    android:layout_marginTop="14dp"
     android:background="@drawable/emslides"
-    android:elevation="4dp"
-    android:orientation="vertical"
-    android:padding="18dp">
+    android:clickable="true"
+    android:clipToOutline="true"
+    android:elevation="2dp"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/item_emergency_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Main Hall"
-        android:textColor="#111827"
+        android:textColor="@color/text_primary"
         android:textSize="22sp"
         android:textStyle="bold" />
 
@@ -23,10 +27,15 @@
         android:id="@+id/item_emergency_patient_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_chip_danger"
+        android:paddingStart="12dp"
+        android:paddingTop="6dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="6dp"
         android:text="Unconscious • Not Breathing"
-        android:textColor="#DC2626"
-        android:textSize="15sp"
+        android:textColor="@color/danger"
+        android:textSize="14sp"
         android:textStyle="bold" />
 
     <TextView
@@ -34,8 +43,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        android:lineSpacingExtra="3dp"
         android:text="Description"
-        android:textColor="#374151"
+        android:textColor="@color/text_body"
         android:textSize="15sp" />
 
     <TextView
@@ -44,7 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
         android:text="Reported at 3:15 PM"
-        android:textColor="#9CA3AF"
+        android:textColor="@color/text_hint"
         android:textSize="13sp" />
 
     <TextView
@@ -53,27 +63,37 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:text="Reported by"
-        android:textColor="#6B7280"
+        android:textColor="@color/text_secondary"
         android:textSize="13sp" />
 
     <TextView
         android:id="@+id/item_emergency_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_chip_brand"
+        android:paddingStart="12dp"
+        android:paddingTop="5dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="5dp"
         android:text="Active"
-        android:textColor="#3F51B5"
-        android:textSize="14sp"
+        android:textColor="@color/brand_on_primary_container"
+        android:textSize="13sp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/item_emergency_approval_status"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:background="@drawable/bg_chip_neutral"
+        android:paddingStart="12dp"
+        android:paddingTop="5dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="5dp"
         android:text="911 call: waiting for organizer"
-        android:textColor="#B45309"
-        android:textSize="14sp"
+        android:textColor="@color/warning_dark_text"
+        android:textSize="13sp"
         android:textStyle="bold"
         android:visibility="gone" />
 
@@ -81,52 +101,44 @@
         android:id="@+id/item_emergency_approval_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="12dp"
         android:orientation="horizontal"
         android:visibility="gone">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/item_emergency_approve_button"
+            style="@style/Widget.FirstLink.Button.Danger"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="48dp"
             android:layout_marginEnd="6dp"
+            android:layout_weight="1"
             android:text="Approve 911"
-            android:textAllCaps="false"
             android:textSize="15sp"
-            android:textStyle="bold"
-            app:backgroundTint="#DC2626"
-            app:cornerRadius="14dp" />
+            android:textStyle="bold" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/item_emergency_deny_button"
-            style="@style/Widget.Material3.Button.OutlinedButton"
+            style="@style/Widget.FirstLink.Button.Outlined"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="48dp"
             android:layout_marginStart="6dp"
+            android:layout_weight="1"
             android:text="Deny"
-            android:textAllCaps="false"
-            android:textColor="#6B7280"
+            android:textColor="@color/text_secondary"
             android:textSize="15sp"
-            android:textStyle="bold"
-            app:cornerRadius="14dp"
-            app:strokeColor="#9CA3AF" />
+            android:textStyle="bold" />
 
     </LinearLayout>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/item_emergency_resolve_button"
-        style="@style/Widget.Material3.Button.OutlinedButton"
+        style="@style/Widget.FirstLink.Button.Outlined"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginTop="14dp"
         android:text="Mark Resolved"
-        android:textAllCaps="false"
-        android:textColor="#16A34A"
+        android:textColor="@color/success"
         android:textSize="15sp"
-        android:textStyle="bold"
-        app:cornerRadius="14dp"
-        app:strokeColor="#16A34A" />
+        android:textStyle="bold" />
 
 </LinearLayout>

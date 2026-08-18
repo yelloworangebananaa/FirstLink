@@ -1,7 +1,38 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+    <!--
+      Dark theme. Everything visual is already tokenised, so values-night/colors.xml does the
+      re-skin on its own; the only thing that cannot come from a colour token is the status
+      bar icon polarity, which has to flip to light icons for a black page.
+    -->
     <style name="Base.Theme.FirstLink" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">@color/brand_primary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/brand_primary_container</item>
+        <item name="colorOnPrimaryContainer">@color/brand_on_primary_container</item>
+
+        <item name="colorSecondary">@color/brand_primary</item>
+        <item name="colorOnSecondary">@color/white</item>
+
+        <item name="colorError">@color/danger</item>
+        <item name="colorOnError">@color/white</item>
+
+        <item name="android:colorBackground">@color/surface</item>
+        <item name="colorOnBackground">@color/text_primary</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="colorOutline">@color/border_light</item>
+        <item name="elevationOverlayEnabled">false</item>
+
+        <item name="android:statusBarColor">@color/surface</item>
+        <item name="android:navigationBarColor">@color/surface</item>
+        <item name="android:windowLightStatusBar">false</item>
+
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.FirstLink.Small</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.FirstLink.Medium</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.FirstLink.Large</item>
+
+        <item name="materialButtonStyle">@style/Widget.FirstLink.Button.Primary</item>
+        <item name="android:windowAnimationStyle">@style/WindowAnimation.FirstLink</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.FirstLink.Dialog</item>
     </style>
 </resources>

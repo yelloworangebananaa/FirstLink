@@ -16,6 +16,7 @@ import com.example.firstlink.model.EmergencyRequest;
 import com.example.firstlink.model.Event;
 import com.example.firstlink.model.User;
 import com.example.firstlink.util.Dialer;
+import com.example.firstlink.util.GlassBlur;
 import com.example.firstlink.util.NotificationHelper;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -117,7 +118,7 @@ public class AttendeeEmergencyActivity extends BaseActivity {
             return;
         }
 
-        new MaterialAlertDialogBuilder(this)
+        GlassBlur.behindDialog(new MaterialAlertDialogBuilder(this)
                 .setTitle("Emergency reported")
                 .setCancelable(false)
                 .setMessage("Qualified responders have been alerted.\n\n"
@@ -134,7 +135,7 @@ public class AttendeeEmergencyActivity extends BaseActivity {
                         Dialer.confirmAndDial911(AttendeeEmergencyActivity.this);
                     }
                 })
-                .show();
+                .show());
     }
 
     /**
@@ -146,7 +147,7 @@ public class AttendeeEmergencyActivity extends BaseActivity {
         awaitingApprovalId = request.getId();
         repo.requestCallApproval(awaitingApprovalId);
 
-        waitingDialog = new MaterialAlertDialogBuilder(this)
+        waitingDialog = GlassBlur.behindDialog(new MaterialAlertDialogBuilder(this)
                 .setTitle("Emergency reported")
                 .setCancelable(false)
                 .setMessage("Qualified responders have been alerted.\n\n"
@@ -158,7 +159,7 @@ public class AttendeeEmergencyActivity extends BaseActivity {
                         returnToDashboard();
                     }
                 })
-                .show();
+                .show());
     }
 
     /** Called whenever server data changes while this screen is open. */
@@ -171,7 +172,7 @@ public class AttendeeEmergencyActivity extends BaseActivity {
         if (EmergencyRequest.APPROVAL_APPROVED.equals(approval)) {
             awaitingApprovalId = null;
             dismissWaitingDialog();
-            new MaterialAlertDialogBuilder(this)
+            GlassBlur.behindDialog(new MaterialAlertDialogBuilder(this)
                     .setTitle("911 call approved")
                     .setCancelable(false)
                     .setMessage("The organizer approved calling 911 for this emergency.")
@@ -187,11 +188,11 @@ public class AttendeeEmergencyActivity extends BaseActivity {
                             Dialer.confirmAndDial911(AttendeeEmergencyActivity.this);
                         }
                     })
-                    .show();
+                    .show());
         } else if (EmergencyRequest.APPROVAL_DENIED.equals(approval)) {
             awaitingApprovalId = null;
             dismissWaitingDialog();
-            new MaterialAlertDialogBuilder(this)
+            GlassBlur.behindDialog(new MaterialAlertDialogBuilder(this)
                     .setTitle("911 call not approved")
                     .setCancelable(false)
                     .setMessage("The organizer did not approve a 911 call. The emergency is still "
@@ -202,7 +203,7 @@ public class AttendeeEmergencyActivity extends BaseActivity {
                             returnToDashboard();
                         }
                     })
-                    .show();
+                    .show());
         }
     }
 

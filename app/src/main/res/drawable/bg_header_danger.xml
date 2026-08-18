@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Emergency page header. Every other page header is now an unadorned large title on the
+     white page; these two keep a soft red wash so urgency is legible at a glance without
+     the header competing with the content underneath it. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <corners android:radius="18dp" />
+    <solid android:color="@color/danger_container" />
+</shape>

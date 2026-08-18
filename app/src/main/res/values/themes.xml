@@ -1,9 +1,323 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+    <!-- Base application theme. White page, indigo brand, generous rounding. -->
     <style name="Base.Theme.FirstLink" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/brand_primary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/brand_primary_container</item>
+        <item name="colorOnPrimaryContainer">@color/brand_on_primary_container</item>
+
+        <item name="colorSecondary">@color/brand_primary</item>
+        <item name="colorOnSecondary">@color/white</item>
+
+        <item name="colorError">@color/danger</item>
+        <item name="colorOnError">@color/white</item>
+
+        <item name="android:colorBackground">@color/surface</item>
+        <item name="colorOnBackground">@color/text_primary</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="colorOutline">@color/border_light</item>
+        <!-- Material tints any raised surface with the primary hue ("tonal elevation"), which
+             turned the raised cards visibly blue. Apple does not do this: a lifted card is the
+             same white as a flat one, only shadowed. Off app-wide. -->
+        <item name="elevationOverlayEnabled">false</item>
+
+        <item name="android:statusBarColor">@color/surface</item>
+        <item name="android:navigationBarColor">@color/surface</item>
+        <item name="android:windowLightStatusBar">true</item>
+
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.FirstLink.Small</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.FirstLink.Medium</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.FirstLink.Large</item>
+
+        <!-- Every unstyled filled MaterialButton in the app picks this up automatically. -->
+        <item name="materialButtonStyle">@style/Widget.FirstLink.Button.Primary</item>
+
+        <!-- Slide+fade "push" transition applied to every startActivity()/finish() call. -->
+        <item name="android:windowAnimationStyle">@style/WindowAnimation.FirstLink</item>
+
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.FirstLink.Dialog</item>
+    </style>
+
+    <!-- Dialogs follow the same white-surface language as the pages, but they are the one
+         genuinely floating layer in the app, so they get the real glass treatment: the page
+         behind them is really Gaussian-blurred (util/GlassBlur.java, API 31+), the surface
+         is held just short of opaque so that blur reads through it, and the scrim is dialled
+         back from the stock 0.6 - a heavy dim would simply crush the blur into grey. -->
+    <style name="ThemeOverlay.FirstLink.Dialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="colorSurface">@color/dialog_glass_surface</item>
+        <item name="colorSurfaceContainerHigh">@color/dialog_glass_surface</item>
+        <item name="android:backgroundDimAmount">0.32</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="colorOnSurfaceVariant">@color/text_body</item>
+        <item name="shapeAppearanceCornerLarge">@style/ShapeAppearance.FirstLink.Large</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.FirstLink.Button.Dialog.Positive</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.FirstLink.Button.Dialog.Negative</item>
+        <item name="buttonBarNeutralButtonStyle">@style/Widget.FirstLink.Button.Dialog.Negative</item>
+    </style>
+
+    <!-- Same dialog, red affirmative. Passed explicitly at the two call sites whose positive
+         action is genuinely destructive/urgent, since a theme cannot vary per dialog. -->
+    <style name="ThemeOverlay.FirstLink.Dialog.Danger">
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.FirstLink.Button.Dialog.Positive.Danger</item>
     </style>
 
     <style name="Theme.FirstLink" parent="Base.Theme.FirstLink" />
+
+    <style name="ShapeAppearance.FirstLink.Small" parent="ShapeAppearance.Material3.SmallComponent">
+        <item name="cornerSize">16dp</item>
+    </style>
+
+    <style name="ShapeAppearance.FirstLink.Medium" parent="ShapeAppearance.Material3.MediumComponent">
+        <item name="cornerSize">20dp</item>
+    </style>
+
+    <style name="ShapeAppearance.FirstLink.Large" parent="ShapeAppearance.Material3.LargeComponent">
+        <item name="cornerSize">28dp</item>
+    </style>
+
+    <!-- True stadium. A percentage corner keeps every button a full pill no matter what
+         height the layout gives it (they range 48dp -> 78dp across the app), which a fixed
+         dp radius cannot do. -->
+    <style name="ShapeAppearance.FirstLink.Pill" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <!-- ===================== Buttons ===================== -->
+
+    <!-- Every button in the app is a full pill with NO stroke. Two tiers only:
+         a solid-fill tier (Primary/Danger/Success) that carries a soft shadow tinted with
+         its own hue, and a neutral "glass" tier (Outlined/Neutral) that sits almost flat
+         and borrows the brand colour for its label instead of for its material. -->
+    <style name="Widget.FirstLink.Button" parent="Widget.Material3.Button">
+        <item name="android:stateListAnimator">@animator/button_press_feedback</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearance.FirstLink.Pill</item>
+        <item name="strokeWidth">0dp</item>
+    </style>
+
+    <!-- Solid brand pill. The workhorse CTA on white pages. Flat fill, no rim: the only
+         dimension comes from the lighter-blue glow bleeding out underneath it. -->
+    <style name="Widget.FirstLink.Button.Primary" parent="Widget.FirstLink.Button">
+        <item name="backgroundTint">@color/brand_primary</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:elevation">4dp</item>
+        <item name="elevation">4dp</item>
+        <item name="android:outlineSpotShadowColor" tools:targetApi="p">@color/brand_glow</item>
+        <item name="android:outlineAmbientShadowColor" tools:targetApi="p">@color/brand_glow</item>
+    </style>
+
+    <style name="Widget.FirstLink.Button.Danger" parent="Widget.FirstLink.Button">
+        <item name="backgroundTint">@color/danger</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:elevation">4dp</item>
+        <item name="elevation">4dp</item>
+        <item name="android:outlineSpotShadowColor" tools:targetApi="p">@color/danger_glow</item>
+        <item name="android:outlineAmbientShadowColor" tools:targetApi="p">@color/danger_glow</item>
+    </style>
+
+    <style name="Widget.FirstLink.Button.Success" parent="Widget.FirstLink.Button">
+        <item name="backgroundTint">@color/success</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:elevation">4dp</item>
+        <item name="elevation">4dp</item>
+        <item name="android:outlineSpotShadowColor" tools:targetApi="p">@color/success_glow</item>
+        <item name="android:outlineAmbientShadowColor" tools:targetApi="p">@color/success_glow</item>
+    </style>
+
+    <!-- Glass tier, muted label: "Cancel"-weight actions that should recede. -->
+    <style name="Widget.FirstLink.Button.Neutral" parent="Widget.FirstLink.Button">
+        <item name="backgroundTint">@color/glass_fill</item>
+        <item name="android:textColor">@color/text_body</item>
+        <item name="android:elevation">0dp</item>
+        <item name="elevation">0dp</item>
+        <item name="rippleColor">@color/glass_ripple</item>
+    </style>
+
+    <!-- Glass tier, branded label. Historically the "outlined" style; the stroke is gone -
+         the pale fill is the whole material now, and the brand-coloured text + icon are what
+         say "still an interactive action". Name kept so existing layouts keep resolving. -->
+    <style name="Widget.FirstLink.Button.Outlined" parent="Widget.FirstLink.Button">
+        <item name="backgroundTint">@color/glass_fill</item>
+        <item name="android:textColor">@color/brand_primary</item>
+        <item name="iconTint">@color/brand_primary</item>
+        <item name="android:elevation">0dp</item>
+        <item name="elevation">0dp</item>
+        <item name="rippleColor">@color/glass_ripple</item>
+    </style>
+
+    <!-- Dialog action buttons. Material3's default button bar uses compact TEXT buttons;
+         these restore real pills. Insets are zeroed because MaterialButton's default 6dp
+         vertical insets eat into a wrap_content dialog button and squash the pill. -->
+    <style name="Widget.FirstLink.Button.Dialog" parent="Widget.FirstLink.Button">
+        <item name="android:minWidth">104dp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:paddingLeft">22dp</item>
+        <item name="android:paddingRight">22dp</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="Widget.FirstLink.Button.Dialog.Positive">
+        <item name="backgroundTint">@color/brand_primary</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:elevation">4dp</item>
+        <item name="elevation">4dp</item>
+        <item name="android:outlineSpotShadowColor" tools:targetApi="p">@color/brand_glow</item>
+        <item name="android:outlineAmbientShadowColor" tools:targetApi="p">@color/brand_glow</item>
+    </style>
+
+    <!-- Destructive confirms (end event, approve a real 911 call) opt into this via a
+         per-call theme overlay on MaterialAlertDialogBuilder. -->
+    <style name="Widget.FirstLink.Button.Dialog.Positive.Danger">
+        <item name="backgroundTint">@color/danger</item>
+        <item name="android:outlineSpotShadowColor" tools:targetApi="p">@color/danger_glow</item>
+        <item name="android:outlineAmbientShadowColor" tools:targetApi="p">@color/danger_glow</item>
+    </style>
+
+    <style name="Widget.FirstLink.Button.Dialog.Negative">
+        <item name="backgroundTint">@color/glass_fill</item>
+        <item name="android:textColor">@color/text_body</item>
+        <item name="android:elevation">0dp</item>
+        <item name="elevation">0dp</item>
+        <item name="rippleColor">@color/glass_ripple</item>
+    </style>
+
+    <style name="Widget.FirstLink.Button.Text" parent="Widget.Material3.Button.TextButton">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
+
+    <!-- Primary action inside a grouped panel. The panel is light now, so a white pill would
+         disappear into it - this is the solid accent pill, the one primary action per screen. -->
+    <style name="Widget.FirstLink.Button.OnGradient" parent="Widget.FirstLink.Button">
+        <item name="backgroundTint">@color/brand_primary</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="elevation">0dp</item>
+        <item name="android:elevation">0dp</item>
+        <!-- No rippleColor override: this pill is solid accent now, so the ripple has to be
+             light-on-dark. The old grey ripple was sized for the white pill this used to be,
+             and it visibly washed the fill out whenever the button held focus. -->
+    </style>
+
+    <!-- Secondary action in the same panel. The panel is white now, so a white fill would
+         vanish into it - this takes the neutral grey instead. -->
+    <style name="Widget.FirstLink.Button.OnGradientGhost" parent="Widget.FirstLink.Button">
+        <item name="backgroundTint">@color/glass_fill</item>
+        <item name="android:textColor">@color/brand_primary</item>
+        <item name="elevation">0dp</item>
+        <item name="android:elevation">0dp</item>
+        <item name="rippleColor">@color/glass_ripple</item>
+    </style>
+
+    <!-- ===================== Surfaces ===================== -->
+
+    <!-- Page header. Deference: a header is a large title on the page, not a slab of colour
+         competing with the content below it. No fill, no shadow - the type is the header.
+         Kept as a style (rather than deleted) so all 13 layouts keep resolving untouched. -->
+    <style name="Widget.FirstLink.HeroCard" parent="">
+        <item name="android:background">@null</item>
+        <item name="android:elevation">0dp</item>
+    </style>
+
+    <!-- Page headers get the accent band; the three full-page heroes (home, join, room codes)
+         stay transparent because their card wraps the whole screen. -->
+    <style name="Widget.FirstLink.HeaderCard" parent="Widget.FirstLink.HeroCard">
+        <item name="android:background">@drawable/bg_header_hero</item>
+    </style>
+
+    <!-- The one exception: emergency headers keep a soft red wash. Urgency is content here,
+         so it earns colour that an ordinary page header does not. -->
+    <style name="Widget.FirstLink.HeaderCard.Danger">
+        <item name="android:background">@drawable/bg_header_danger</item>
+    </style>
+
+    <!-- Grouped-content panel: quiet inset surface that binds a set of controls together. -->
+    <style name="Widget.FirstLink.FrostedBar" parent="">
+        <item name="android:background">@drawable/bg_frosted_bar</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <!-- Card spec: 18dp radius, 5%-ink hairline, and a shadow soft enough to read as depth
+         rather than as a drop shadow (0 4px 24px rgba(0,0,0,.06)). -->
+    <style name="Widget.FirstLink.Card" parent="Widget.Material3.CardView.Outlined">
+        <item name="cardBackgroundColor">@color/card_surface</item>
+        <item name="cardCornerRadius">18dp</item>
+        <item name="cardElevation">3dp</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="strokeColor">@color/glass_border</item>
+        <item name="android:outlineSpotShadowColor" tools:targetApi="p">@color/card_glow</item>
+        <item name="android:outlineAmbientShadowColor" tools:targetApi="p">@color/card_glow</item>
+    </style>
+
+    <style name="Widget.FirstLink.BackButton" parent="">
+        <item name="android:background">@drawable/bg_circle_brand_soft</item>
+        <item name="android:foreground">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:tint">@color/brand_primary</item>
+    </style>
+
+    <!-- ===================== Type ===================== -->
+
+    <!-- Type carries the hierarchy now that the colour slabs are gone, so the ramp is the
+         load-bearing part of this theme. Apple's web scale (48/32/17/13) mapped onto a
+         phone: the hero becomes the 34sp iOS large title, body and caption stay 17/13. -->
+
+    <!-- Caption weight. The old eyebrow was 12sp bold at 0.16 tracking - shouty enough to
+         compete with the title it sits above. Deference: same role, quieter voice. -->
+    <style name="TextAppearance.FirstLink.Eyebrow" parent="TextAppearance.Material3.LabelSmall">
+        <item name="android:textSize">13sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:letterSpacing">0.06</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <!-- Large title. Tight leading (1.1) is what makes a big title read as one object. -->
+    <style name="TextAppearance.FirstLink.Hero" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="android:textSize">34sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/on_gradient</item>
+        <item name="android:lineSpacingMultiplier">1.1</item>
+    </style>
+
+    <style name="TextAppearance.FirstLink.HeroBody" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/on_gradient_muted</item>
+        <item name="android:lineSpacingMultiplier">1.45</item>
+    </style>
+
+    <style name="TextAppearance.FirstLink.PageTitle" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="android:textSize">34sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:lineSpacingMultiplier">1.1</item>
+    </style>
+
+    <style name="TextAppearance.FirstLink.PageSubtitle" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:lineSpacingMultiplier">1.45</item>
+    </style>
+
+    <style name="TextAppearance.FirstLink.FieldLabel" parent="TextAppearance.Material3.LabelLarge">
+        <item name="android:textSize">15sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/text_primary</item>
+    </style>
+
+    <style name="WindowAnimation.FirstLink" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/activity_open_enter</item>
+        <item name="android:activityOpenExitAnimation">@anim/activity_open_exit</item>
+        <item name="android:activityCloseEnterAnimation">@anim/activity_close_enter</item>
+        <item name="android:activityCloseExitAnimation">@anim/activity_close_exit</item>
+    </style>
 </resources>

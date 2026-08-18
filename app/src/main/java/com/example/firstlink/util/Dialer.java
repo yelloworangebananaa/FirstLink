@@ -18,7 +18,7 @@ public class Dialer {
     }
 
     public static void confirmAndDial911(final Activity activity) {
-        new MaterialAlertDialogBuilder(activity)
+        GlassBlur.behindDialog(new MaterialAlertDialogBuilder(activity)
                 .setTitle("Call 911?")
                 .setMessage("This opens your phone dialer with 911. Only proceed for a real emergency.")
                 .setNegativeButton("Cancel", null)
@@ -28,6 +28,6 @@ public class Dialer {
                         activity.startActivity(new Intent(Intent.ACTION_DIAL, Uri.parse("tel:911")));
                     }
                 })
-                .show();
+                .show());
     }
 }

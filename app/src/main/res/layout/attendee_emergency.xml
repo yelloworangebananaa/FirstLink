@@ -1,91 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/attendee_emergency"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="@color/surface"
+    android:clipToPadding="false"
     android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clipToPadding="false"
         android:orientation="vertical"
-        android:paddingStart="32dp"
-        android:paddingEnd="32dp"
-        android:paddingBottom="24dp">
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="28dp">
 
         <ImageButton
             android:id="@+id/back_button"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="-16dp"
-            android:layout_marginTop="12dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
+            style="@style/Widget.FirstLink.BackButton"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginTop="16dp"
             android:contentDescription="Back"
             android:src="@drawable/ic_back" />
 
-        <TextView
-            android:id="@+id/attendee_emergency_title"
-            android:layout_width="wrap_content"
+        <!-- Danger-tinted header only. The form itself stays plain white and high-contrast:
+             this is filled in under stress and must never be decorative. -->
+        <LinearLayout
+            android:id="@+id/attendee_emergency_header_card"
+            style="@style/Widget.FirstLink.HeaderCard.Danger"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="56dp"
-            android:text="Report Emergency"
-            android:textColor="#111111"
-            android:textSize="30sp"
-            android:textStyle="bold" />
+            android:layout_marginTop="20dp"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <TextView
+                style="@style/TextAppearance.FirstLink.Eyebrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Medical emergency"
+                android:textColor="@color/on_gradient_muted" />
+
+            <TextView
+                android:id="@+id/attendee_emergency_title"
+                style="@style/TextAppearance.FirstLink.Hero"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Report Emergency" />
+
+            <TextView
+                style="@style/TextAppearance.FirstLink.HeroBody"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="If someone is in danger right now, call 911 first." />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/attendee_emergency_location_label"
+            style="@style/TextAppearance.FirstLink.FieldLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
-            android:text="Location"
-            android:textColor="#111111"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="26dp"
+            android:text="Location" />
 
         <Spinner
             android:id="@+id/attendee_emergency_location_spinner"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="10dp" />
+            android:layout_height="58dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_spinner"
+            android:paddingStart="18dp"
+            android:paddingEnd="46dp" />
 
         <TextView
             android:id="@+id/attendee_emergency_description_label"
+            style="@style/TextAppearance.FirstLink.FieldLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="Description"
-            android:textColor="#111111"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="22dp"
+            android:text="Description" />
 
         <EditText
             android:id="@+id/attendee_emergency_description"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:layout_marginTop="10dp"
-            android:background="@android:drawable/edit_text"
+            android:layout_height="130dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_input_field"
             android:gravity="top|start"
             android:hint="Describe what is happening..."
             android:inputType="textMultiLine"
-            android:padding="16dp"
-            android:textColor="#111111"
-            android:textColorHint="#9CA3AF"
+            android:lineSpacingExtra="3dp"
+            android:padding="18dp"
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_hint"
             android:textSize="16sp" />
 
         <TextView
             android:id="@+id/attendee_emergency_consciousness_label"
+            style="@style/TextAppearance.FirstLink.FieldLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Consciousness"
-            android:textColor="#111111"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="22dp"
+            android:text="Consciousness" />
 
         <RadioGroup
             android:id="@+id/attendee_emergency_consciousness_group"
@@ -96,33 +120,41 @@
 
             <RadioButton
                 android:id="@+id/attendee_emergency_conscious"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Conscious" />
+                android:layout_weight="1"
+                android:text="Conscious"
+                android:textColor="@color/text_primary"
+                android:textSize="14sp" />
 
             <RadioButton
                 android:id="@+id/attendee_emergency_unconscious"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Unconscious" />
+                android:layout_weight="1"
+                android:text="Unconscious"
+                android:textColor="@color/text_primary"
+                android:textSize="14sp" />
 
             <RadioButton
                 android:id="@+id/attendee_emergency_consciousness_unknown"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Unknown" />
+                android:layout_weight="1"
+                android:text="Unknown"
+                android:textColor="@color/text_primary"
+                android:textSize="14sp" />
 
         </RadioGroup>
 
         <TextView
             android:id="@+id/attendee_emergency_breathing_label"
+            style="@style/TextAppearance.FirstLink.FieldLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Breathing"
-            android:textColor="#111111"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="18dp"
+            android:text="Breathing" />
 
         <RadioGroup
             android:id="@+id/attendee_emergency_breathing_group"
@@ -133,35 +165,42 @@
 
             <RadioButton
                 android:id="@+id/attendee_emergency_breathing"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Breathing" />
+                android:layout_weight="1"
+                android:text="Breathing"
+                android:textColor="@color/text_primary"
+                android:textSize="14sp" />
 
             <RadioButton
                 android:id="@+id/attendee_emergency_not_breathing"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Not Breathing" />
+                android:layout_weight="1"
+                android:text="Not Breathing"
+                android:textColor="@color/text_primary"
+                android:textSize="14sp" />
 
             <RadioButton
                 android:id="@+id/attendee_emergency_breathing_unknown"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Unknown" />
+                android:layout_weight="1"
+                android:text="Unknown"
+                android:textColor="@color/text_primary"
+                android:textSize="14sp" />
 
         </RadioGroup>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/attendee_emergency_send_button"
+            style="@style/Widget.FirstLink.Button.Danger"
             android:layout_width="match_parent"
-            android:layout_height="58dp"
-            android:layout_marginTop="28dp"
+            android:layout_height="62dp"
+            android:layout_marginTop="26dp"
             android:text="Send Emergency"
-            android:textAllCaps="false"
             android:textSize="18sp"
-            android:textStyle="bold"
-            app:backgroundTint="#DC2626"
-            app:cornerRadius="18dp" />
+            android:textStyle="bold" />
 
     </LinearLayout>
 

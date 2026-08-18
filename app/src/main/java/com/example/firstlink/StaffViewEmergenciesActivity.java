@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.firstlink.adapter.EmergencyAdapter;
 import com.example.firstlink.data.FirstLinkRepository;
 import com.example.firstlink.model.EmergencyRequest;
+import com.example.firstlink.util.GlassBlur;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.List;
@@ -86,7 +87,10 @@ public class StaffViewEmergenciesActivity extends BaseActivity {
 
     /** Confirmed both ways: approving authorises a real 911 call, denying blocks one. */
     private void confirmApproval(final EmergencyRequest emergency, final boolean approved) {
-        new MaterialAlertDialogBuilder(this)
+        // Authorising a real 911 call gets the red pill; denying is an ordinary confirm.
+        GlassBlur.behindDialog(new MaterialAlertDialogBuilder(this, approved
+                        ? R.style.ThemeOverlay_FirstLink_Dialog_Danger
+                        : R.style.ThemeOverlay_FirstLink_Dialog)
                 .setTitle(approved ? "Approve 911 call?" : "Deny 911 call?")
                 .setMessage(approved
                         ? "The person reporting the emergency at " + emergency.getLocation()
@@ -105,12 +109,12 @@ public class StaffViewEmergenciesActivity extends BaseActivity {
                         refresh();
                     }
                 })
-                .show();
+                .show());
     }
 
     /** Confirmed, because an accidental tap would hide a live emergency from staff. */
     private void confirmResolve(final EmergencyRequest emergency) {
-        new MaterialAlertDialogBuilder(this)
+        GlassBlur.behindDialog(new MaterialAlertDialogBuilder(this)
                 .setTitle("Mark resolved?")
                 .setMessage("This removes the emergency at " + emergency.getLocation()
                         + " from the active list. Only do this once the patient has been "
@@ -126,6 +130,6 @@ public class StaffViewEmergenciesActivity extends BaseActivity {
                         refresh();
                     }
                 })
-                .show();
+                .show());
     }
 }

@@ -14,6 +14,7 @@ import com.example.firstlink.model.EmergencyRequest;
 import com.example.firstlink.model.Event;
 import com.example.firstlink.util.Dialer;
 import com.google.android.material.button.MaterialButton;
+import com.example.firstlink.util.GlassBlur;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class StaffDashboardActivity extends AppCompatActivity {
@@ -117,7 +118,8 @@ public class StaffDashboardActivity extends AppCompatActivity {
     }
 
     private void confirmEndEvent() {
-        new MaterialAlertDialogBuilder(this)
+        // Danger overlay: the affirmative action here is irreversible, so its pill is red.
+        GlassBlur.behindDialog(new MaterialAlertDialogBuilder(this, R.style.ThemeOverlay_FirstLink_Dialog_Danger)
                 .setTitle("End Event")
                 .setMessage("This ends the event for everyone: join codes stop working and all "
                         + "emergencies and help requests are deleted. This cannot be undone.")
@@ -135,6 +137,6 @@ public class StaffDashboardActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 })
-                .show();
+                .show());
     }
 }
