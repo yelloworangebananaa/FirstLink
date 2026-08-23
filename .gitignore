@@ -29,3 +29,9 @@ Thumbs.db
 # Env / secrets
 *.env
 .env.local
+
+# Xcode
+xcuserdata/
+*.xcuserstate
+DerivedData/
+.DS_Store
