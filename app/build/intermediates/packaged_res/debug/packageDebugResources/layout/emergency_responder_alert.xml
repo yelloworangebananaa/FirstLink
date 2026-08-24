@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ResponderAlertView: one incident, read under alarm. The place is the biggest thing on
+     screen; the accept action is pinned within thumb reach and never scrolls away. -->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/emergency_responder_alert"
+    android:fitsSystemWindows="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_page_glass">
+
+    <!-- Nav bar, 44dp, inline title. -->
+    <ImageButton
+        android:id="@+id/back_button"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Back"
+        android:padding="10dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_back"
+        android:tint="@color/brand_primary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/alert_nav_title"
+        android:layout_width="0dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginEnd="52dp"
+        android:gravity="center"
+        android:text="Responder Alert"
+        android:textColor="@color/text_primary"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/back_button" />
+
+    <ScrollView
+        android:id="@+id/alert_scroll"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:padding="20dp"
+        app:layout_constraintBottom_toTopOf="@id/alert_action_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/back_button">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- The incident. -->
+            <LinearLayout
+                android:id="@+id/alert_incident_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_ios_card_glass_red"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:id="@+id/alert_eyebrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_sf_exclamationmark_triangle_fill"
+                    android:drawablePadding="8dp"
+                    android:drawableTint="@color/danger"
+                    android:text="Emergency"
+                    android:textColor="@color/danger"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/alert_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Main Hall"
+                    android:textColor="@color/text_primary"
+                    android:textSize="38sp"
+                    android:textStyle="bold" />
+
+                <!-- iOS shows two red StatusPills; Android binds one joined string. -->
+                <TextView
+                    android:id="@+id/alert_patient_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_ios_pill_red"
+                    android:drawableStart="@drawable/ic_sf_eye_fill"
+                    android:drawablePadding="6dp"
+                    android:drawableTint="@color/danger"
+                    android:paddingStart="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="5dp"
+                    android:text="Conscious • Breathing"
+                    android:textColor="@color/danger"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/alert_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:lineSpacingMultiplier="1.3"
+                    android:text="No description provided"
+                    android:textColor="@color/text_body"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/alert_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Reported at 10:24"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <!-- Plain-text directions, shown once accepted. -->
+            <TextView
+                android:id="@+id/alert_directions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_ios_card_glass_green"
+                android:drawableStart="@drawable/ic_sf_figure_walk_motion"
+                android:drawablePadding="10dp"
+                android:drawableTint="@color/success"
+                android:gravity="center_vertical"
+                android:padding="20dp"
+                android:text="Go to: Main Hall"
+                android:textColor="@color/text_primary"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <!-- Who was alerted, and who took it. -->
+            <LinearLayout
+                android:id="@+id/alert_responders_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_ios_card_glass"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:id="@+id/alert_responders_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Responders"
+                    android:textColor="@color/text_primary"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/alert_responders_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:lineSpacingMultiplier="1.35"
+                    android:text="No qualified responders have joined this event yet."
+                    android:textColor="@color/text_body"
+                    android:textSize="15sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="@drawable/bg_ios_separator" />
+
+                <TextView
+                    android:id="@+id/alert_accepted_by"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:drawableStart="@drawable/ic_sf_person_fill_checkmark"
+                    android:drawablePadding="8dp"
+                    android:drawableTint="@color/text_secondary"
+                    android:text="Accepted by: nobody yet"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Pinned action bar: the one thing a responder under stress has to hit. -->
+    <LinearLayout
+        android:id="@+id/alert_action_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.example.firstlink.widget.DraggableMaterialButton
+            android:id="@+id/alert_accept_button"
+            style="@style/Widget.FirstLink.Button.Success"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:elevation="0dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:stateListAnimator="@null"
+            android:text="Accept — I'm Responding"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/success"
+            app:cornerRadius="28dp"
+            app:elevation="0dp"
+            app:icon="@drawable/ic_sf_figure_run"
+            app:iconGravity="textStart"
+            app:iconPadding="8dp"
+            app:iconSize="20dp"
+            app:iconTint="@color/white"
+            app:strokeWidth="0dp" />
+
+        <com.example.firstlink.widget.DraggableMaterialButton
+            android:id="@+id/alert_decline_button"
+            style="@style/Widget.FirstLink.Button.Text"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginTop="12dp"
+            android:elevation="0dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:stateListAnimator="@null"
+            android:text="Cannot Respond"
+            android:textColor="@color/brand_primary"
+            android:textSize="15sp"
+            app:elevation="0dp"
+            app:strokeWidth="0dp" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
