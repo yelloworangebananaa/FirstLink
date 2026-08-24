@@ -1,8 +1,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!--
-      Dark theme. Everything visual is already tokenised, so values-night/colors.xml does the
-      re-skin on its own; the only thing that cannot come from a colour token is the status
-      bar icon polarity, which has to flip to light icons for a black page.
+      Dark theme. Everything visual is tokenised, so values-night/colors.xml does the whole
+      re-skin on its own - including the field, whose blooms brighten rather than dim.
+      The only things that cannot come from a colour token are the status-bar icon
+      polarity, which has to flip to light icons on a near-black page, and the dialog
+      scrim, which is lifted because a dark page needs more separation under a dark sheet.
     -->
     <style name="Base.Theme.FirstLink" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/brand_primary</item>
@@ -23,8 +25,10 @@
         <item name="colorOutline">@color/border_light</item>
         <item name="elevationOverlayEnabled">false</item>
 
-        <item name="android:statusBarColor">@color/surface</item>
-        <item name="android:navigationBarColor">@color/surface</item>
+        <item name="android:windowBackground">@drawable/bg_page_glass</item>
+
+        <item name="android:statusBarColor">@color/page_top</item>
+        <item name="android:navigationBarColor">@color/page_bottom</item>
         <item name="android:windowLightStatusBar">false</item>
 
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.FirstLink.Small</item>
@@ -32,7 +36,26 @@
         <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.FirstLink.Large</item>
 
         <item name="materialButtonStyle">@style/Widget.FirstLink.Button.Primary</item>
+
+        <item name="android:colorControlNormal">@color/text_secondary</item>
+        <item name="android:colorControlActivated">@color/brand_primary</item>
+        <item name="colorControlNormal">@color/text_secondary</item>
+        <item name="colorControlActivated">@color/brand_primary</item>
+        <item name="android:textColorHighlight">@color/brand_primary_container</item>
+
         <item name="android:windowAnimationStyle">@style/WindowAnimation.FirstLink</item>
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.FirstLink.Dialog</item>
+    </style>
+
+    <style name="ThemeOverlay.FirstLink.Dialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="colorSurface">@color/dialog_glass_surface</item>
+        <item name="colorSurfaceContainerHigh">@color/dialog_glass_surface</item>
+        <item name="android:backgroundDimAmount">0.45</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="colorOnSurfaceVariant">@color/text_body</item>
+        <item name="shapeAppearanceCornerLarge">@style/ShapeAppearance.FirstLink.Large</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.FirstLink.Button.Dialog.Positive</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.FirstLink.Button.Dialog.Negative</item>
+        <item name="buttonBarNeutralButtonStyle">@style/Widget.FirstLink.Button.Dialog.Negative</item>
     </style>
 </resources>

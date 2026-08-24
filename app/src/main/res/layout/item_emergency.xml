@@ -1,41 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Data-dense row: deliberately plain white with a hairline border. No gradient here -
-     staff scan these under pressure and legibility beats decoration. -->
+<!-- EmergencyCard — iOS gives every incident its own Section, so each row is a standalone
+     inset-grouped card. Location + patient state sit tight at the top (read first);
+     provenance and time sink to the bottom in the quiet caption voice. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="20dp"
     android:layout_marginTop="14dp"
-    android:background="@drawable/emslides"
+    android:layout_marginEnd="20dp"
+    android:background="@drawable/bg_ios_group"
     android:clickable="true"
-    android:clipToOutline="true"
-    android:elevation="2dp"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="16dp">
 
-    <TextView
-        android:id="@+id/item_emergency_location"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Main Hall"
-        android:textColor="@color/text_primary"
-        android:textSize="22sp"
-        android:textStyle="bold" />
+        android:baselineAligned="false"
+        android:gravity="top"
+        android:orientation="horizontal">
 
+        <TextView
+            android:id="@+id/item_emergency_location"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/ic_sf_mappin_circle_fill"
+            android:drawablePadding="8dp"
+            android:drawableTint="@color/brand_primary"
+            android:text="Main Hall"
+            android:textColor="@color/text_primary"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <!-- StatusPill(tint: .emergency). Java can set a long "Active — accepted by … " -->
+        <TextView
+            android:id="@+id/item_emergency_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_ios_pill_red"
+            android:maxWidth="180dp"
+            android:paddingStart="10dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="5dp"
+            android:text="Active"
+            android:textAlignment="center"
+            android:textColor="@color/danger"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- iOS shows two glass capsules (eye + lungs); Android binds one combined string. -->
     <TextView
         android:id="@+id/item_emergency_patient_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/bg_chip_danger"
-        android:paddingStart="12dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_ios_btn_glass_small"
+        android:paddingStart="10dp"
         android:paddingTop="6dp"
-        android:paddingEnd="12dp"
+        android:paddingEnd="10dp"
         android:paddingBottom="6dp"
-        android:text="Unconscious • Not Breathing"
-        android:textColor="@color/danger"
-        android:textSize="14sp"
+        android:text="Conscious • Breathing"
+        android:textColor="@color/text_primary"
+        android:textSize="12sp"
         android:textStyle="bold" />
 
     <TextView
@@ -43,56 +77,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:lineSpacingExtra="3dp"
+        android:lineSpacingMultiplier="1.25"
         android:text="Description"
         android:textColor="@color/text_body"
         android:textSize="15sp" />
 
     <TextView
-        android:id="@+id/item_emergency_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        android:text="Reported at 3:15 PM"
-        android:textColor="@color/text_hint"
-        android:textSize="13sp" />
-
-    <TextView
-        android:id="@+id/item_emergency_reporter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="Reported by"
-        android:textColor="@color/text_secondary"
-        android:textSize="13sp" />
-
-    <TextView
-        android:id="@+id/item_emergency_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/bg_chip_brand"
-        android:paddingStart="12dp"
-        android:paddingTop="5dp"
-        android:paddingEnd="12dp"
-        android:paddingBottom="5dp"
-        android:text="Active"
-        android:textColor="@color/brand_on_primary_container"
-        android:textSize="13sp"
-        android:textStyle="bold" />
-
-    <TextView
         android:id="@+id/item_emergency_approval_status"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/bg_chip_neutral"
-        android:paddingStart="12dp"
-        android:paddingTop="5dp"
-        android:paddingEnd="12dp"
-        android:paddingBottom="5dp"
-        android:text="911 call: waiting for organizer"
-        android:textColor="@color/warning_dark_text"
+        android:layout_marginTop="12dp"
+        android:drawableStart="@drawable/ic_sf_clock_fill"
+        android:drawablePadding="6dp"
+        android:drawableTint="@color/warning"
+        android:text="Waiting for organizer approval to call 911"
+        android:textColor="@color/warning"
         android:textSize="13sp"
         android:textStyle="bold"
         android:visibility="gone" />
@@ -105,40 +104,99 @@
         android:orientation="horizontal"
         android:visibility="gone">
 
-        <com.google.android.material.button.MaterialButton
+        <!-- .buttonStyle(.glassProminent).tint(.emergency) -->
+        <com.example.firstlink.widget.DraggableMaterialButton
             android:id="@+id/item_emergency_approve_button"
             style="@style/Widget.FirstLink.Button.Danger"
             android:layout_width="0dp"
-            android:layout_height="48dp"
+            android:layout_height="40dp"
             android:layout_marginEnd="6dp"
             android:layout_weight="1"
+            android:elevation="0dp"
+            android:insetBottom="0dp"
+            android:insetTop="0dp"
+            android:stateListAnimator="@null"
             android:text="Approve 911"
-            android:textSize="15sp"
-            android:textStyle="bold" />
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/danger"
+            app:cornerRadius="20dp"
+            app:elevation="0dp"
+            app:icon="@drawable/ic_sf_phone_fill"
+            app:iconGravity="textStart"
+            app:iconPadding="8dp"
+            app:iconSize="16dp"
+            app:iconTint="@color/white"
+            app:strokeWidth="0dp" />
 
-        <com.google.android.material.button.MaterialButton
+        <!-- .buttonStyle(.glass) -->
+        <com.example.firstlink.widget.DraggableMaterialButton
             android:id="@+id/item_emergency_deny_button"
             style="@style/Widget.FirstLink.Button.Outlined"
             android:layout_width="0dp"
-            android:layout_height="48dp"
+            android:layout_height="40dp"
             android:layout_marginStart="6dp"
             android:layout_weight="1"
+            android:elevation="0dp"
+            android:insetBottom="0dp"
+            android:insetTop="0dp"
+            android:stateListAnimator="@null"
             android:text="Deny"
-            android:textColor="@color/text_secondary"
-            android:textSize="15sp"
-            android:textStyle="bold" />
+            android:textColor="@color/brand_primary"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/card_surface"
+            app:cornerRadius="20dp"
+            app:elevation="0dp"
+            app:strokeColor="@color/border_light"
+            app:strokeWidth="1dp" />
 
     </LinearLayout>
 
-    <com.google.android.material.button.MaterialButton
+    <!-- Reporter and time are one caption block in iOS; kept adjacent here. -->
+    <TextView
+        android:id="@+id/item_emergency_reporter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Reported by"
+        android:textColor="@color/text_secondary"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/item_emergency_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:text="Reported at 3:15 PM"
+        android:textColor="@color/text_secondary"
+        android:textSize="13sp" />
+
+    <!-- iOS resolves with a trailing swipe action; Android keeps an explicit glass button. -->
+    <com.example.firstlink.widget.DraggableMaterialButton
         android:id="@+id/item_emergency_resolve_button"
         style="@style/Widget.FirstLink.Button.Outlined"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginTop="14dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="12dp"
+        android:elevation="0dp"
+        android:insetBottom="0dp"
+        android:insetTop="0dp"
+        android:stateListAnimator="@null"
         android:text="Mark Resolved"
         android:textColor="@color/success"
-        android:textSize="15sp"
-        android:textStyle="bold" />
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:backgroundTint="@color/card_surface"
+        app:cornerRadius="20dp"
+        app:elevation="0dp"
+        app:icon="@drawable/ic_sf_checkmark_circle_fill"
+        app:iconGravity="textStart"
+        app:iconPadding="8dp"
+        app:iconSize="16dp"
+        app:iconTint="@color/success"
+        app:strokeColor="@color/border_light"
+        app:strokeWidth="1dp" />
 
 </LinearLayout>

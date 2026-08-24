@@ -1,146 +1,203 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- AttendeeDashboardView. Hick's Law: exactly two things to do here, and the
+     dangerous one is the biggest, reddest target in the app. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/attendee_main_dashboard"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/surface"
-    android:clipToPadding="false"
-    android:fillViewport="true">
+    android:background="@drawable/bg_page_glass"
+    android:orientation="vertical">
 
+    <!-- Nav bar: navigation root, so no back chevron - only the trailing gear. -->
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:gravity="end|center_vertical"
+        android:orientation="horizontal"
+        android:paddingEnd="8dp">
+
+        <ImageButton
+            android:id="@+id/attendee_settings_button"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Settings"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_sf_gearshape_fill"
+            android:tint="@color/brand_primary" />
+    </LinearLayout>
+
+    <!-- Large title -->
+    <TextView
+        android:id="@+id/attendee_main_dashboard_event_name"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="8dp"
+        android:text="FirstLink"
+        android:textColor="@color/text_primary"
+        android:textSize="34sp"
+        android:textStyle="bold" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:clipToPadding="false"
-        android:orientation="vertical"
-        android:paddingStart="20dp"
-        android:paddingTop="44dp"
-        android:paddingEnd="20dp"
-        android:paddingBottom="28dp">
+        android:fillViewport="true">
 
         <LinearLayout
-            android:id="@+id/attendee_dashboard_header_card"
-            style="@style/Widget.FirstLink.HeaderCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="24dp">
+            android:padding="20dp">
 
-            <TextView
-                style="@style/TextAppearance.FirstLink.Eyebrow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="You're checked in"
-                android:textColor="@color/on_gradient_muted" />
+            <!-- Recovery path: organizer approved the call after this screen was left. -->
+            <com.example.firstlink.widget.DraggableMaterialButton
+                android:id="@+id/call_911_approved_button"
+                style="@style/Widget.FirstLink.Button.Primary"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginBottom="20dp"
+                android:elevation="0dp"
+                android:insetBottom="0dp"
+                android:insetTop="0dp"
+                android:stateListAnimator="@null"
+                android:text="911 Approved — Call Now"
+                android:textColor="@color/white"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:backgroundTint="@color/danger"
+                app:cornerRadius="28dp"
+                app:elevation="0dp"
+                app:icon="@drawable/ic_sf_phone_fill"
+                app:iconGravity="textStart"
+                app:iconPadding="8dp"
+                app:iconSize="20dp"
+                app:iconTint="@color/white"
+                app:strokeWidth="0dp" />
 
-            <TextView
-                android:id="@+id/attendee_main_dashboard_event_name"
-                style="@style/TextAppearance.FirstLink.Hero"
+            <!-- Von Restorff: the single red object on the screen. Fitts's Law: the
+                 biggest target in the app, because you may have to hit it while panicking.
+                 iOS stacks icon + title + subtitle INSIDE the button; a MaterialButton
+                 cannot hold a two-line label, so the subtitle is overlaid on top of it.
+                 The overlay is non-clickable, so taps fall through to the button. -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.example.firstlink.widget.DraggableMaterialButton
+                    android:id="@+id/attendee_main_dashboard_report_emergency_button"
+                    style="@style/Widget.FirstLink.Button.Primary"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:elevation="0dp"
+                    android:insetBottom="0dp"
+                    android:insetTop="0dp"
+                    android:paddingBottom="26dp"
+                    android:stateListAnimator="@null"
+                    android:text="Report Emergency"
+                    android:textColor="@color/white"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/danger"
+                    app:cornerRadius="26dp"
+                    app:elevation="0dp"
+                    app:icon="@drawable/ic_sf_exclamationmark_triangle_fill"
+                    app:iconGravity="top"
+                    app:iconPadding="12dp"
+                    app:iconSize="44dp"
+                    app:iconTint="@color/white"
+                    app:strokeWidth="0dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginBottom="26dp"
+                    android:alpha="0.9"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:text="Alerts staff and qualified responders instantly"
+                    android:textColor="@color/white"
+                    android:textSize="13sp" />
+            </FrameLayout>
+
+            <!-- .buttonStyle(.glass): icon + title/subtitle column + trailing chevron.
+                 Same overlay trick — the subtitle and chevron are decoration over the button. -->
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Summer Hackathon" />
+                android:layout_marginTop="20dp">
 
-            <LinearLayout
-                style="@style/Widget.FirstLink.FrostedBar"
-                android:layout_width="wrap_content"
+                <com.example.firstlink.widget.DraggableMaterialButton
+                    android:id="@+id/attendee_main_dashboard_request_help_button"
+                    style="@style/Widget.FirstLink.Button.Primary"
+                    android:layout_width="match_parent"
+                    android:layout_height="76dp"
+                    android:elevation="0dp"
+                    android:gravity="start|center_vertical"
+                    android:insetBottom="0dp"
+                    android:insetTop="0dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:paddingBottom="18dp"
+                    android:stateListAnimator="@null"
+                    android:text="Request Help"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/text_primary"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/card_surface"
+                    app:cornerRadius="22dp"
+                    app:elevation="0dp"
+                    app:icon="@drawable/ic_sf_hand_raised_fill"
+                    app:iconGravity="textStart"
+                    app:iconPadding="14dp"
+                    app:iconSize="24dp"
+                    app:iconTint="@color/brand_primary"
+                    app:strokeColor="@color/border_light"
+                    app:strokeWidth="1dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|start"
+                    android:layout_marginStart="58dp"
+                    android:layout_marginBottom="16dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:text="Lost items, directions, accessibility"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="13sp" />
+
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginEnd="20dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_sf_chevron_right"
+                    android:tint="@color/text_hint" />
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="24dp"
+                android:drawableStart="@drawable/ic_sf_phone_fill"
+                android:drawablePadding="8dp"
+                android:drawableTint="@color/text_secondary"
                 android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingStart="14dp"
-                android:paddingTop="8dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="8dp">
-
-                <TextView
-                    android:id="@+id/attendee_main_dashboard_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="● Event Live"
-                    android:textColor="@color/on_gradient"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:text="•"
-                    android:textColor="@color/on_gradient_faint"
-                    android:textSize="13sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Attendee"
-                    android:textColor="@color/on_gradient_muted"
-                    android:textSize="13sp" />
-            </LinearLayout>
+                android:text="If someone is in danger right now, call 911 first."
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp" />
         </LinearLayout>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/call_911_approved_button"
-            style="@style/Widget.FirstLink.Button.Success"
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:layout_marginTop="16dp"
-            android:text="911 Approved — Call Now"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/attendee_dashboard_actions_label"
-            style="@style/TextAppearance.FirstLink.Eyebrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:layout_marginTop="30dp"
-            android:text="Need something?"
-            android:textColor="@color/text_hint" />
-
-        <!-- Deliberately plain, oversized solid buttons: this is the panic-moment surface,
-             so it stays unmistakable rather than decorative. -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/attendee_main_dashboard_report_emergency_button"
-            style="@style/Widget.FirstLink.Button.Danger"
-            android:layout_width="match_parent"
-            android:layout_height="78dp"
-            android:layout_marginTop="12dp"
-            android:text="Report Emergency"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:layout_marginTop="8dp"
-            android:text="Alerts event staff and nearby qualified responders immediately."
-            android:textColor="@color/text_hint"
-            android:textSize="13sp" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/attendee_main_dashboard_request_help_button"
-            style="@style/Widget.FirstLink.Button.Primary"
-            android:layout_width="match_parent"
-            android:layout_height="78dp"
-            android:layout_marginTop="18dp"
-            android:text="Request Help"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:layout_marginTop="8dp"
-            android:text="For non-emergencies: lost items, directions, accessibility."
-            android:textColor="@color/text_hint"
-            android:textSize="13sp" />
-
-    </LinearLayout>
-
-</ScrollView>
+    </ScrollView>
+</LinearLayout>

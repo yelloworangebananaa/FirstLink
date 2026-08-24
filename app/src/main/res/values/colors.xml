@@ -1,94 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Apple-inspired palette. Three principles drive every value here:
-  Clarity (content is king), Deference (UI serves content, never competes),
-  Depth (layering, not decoration, creates hierarchy).
+  FirstLink "liquid glass" palette.
 
-  The page is a soft neutral field and content floats on it in white cards - the grouped
-  pattern Monzo, Revolut and Starling all share. Type carries the hierarchy. Reds/greens are the *accessible* members of
-  Apple's system palette, not the vivid ones - every status colour here clears 4.5:1
-  against white so a safety-critical label is never the thing that fails a contrast check.
+  Two source colours only, both taken straight out of drawable/logo.png: the shield blue
+  (sampled #006CFC at the top of the mark, #0157E9 at the bottom) and the white of the
+  figures inside it. Everything below is those two colours at different opacities.
+
+  The system has three layers, and that is what makes glass read as glass:
+
+    1. FIELD  - the page is never flat. bg_page_glass paints a pale blue-white wash with
+                four soft blooms of the logo blue floating in it. This is the thing the
+                glass refracts; without it, translucent panels look like grey panels.
+    2. GLASS  - surfaces are white at 38-86% with a brighter white rim on top. Opacity
+                climbs as you go deeper into the stack (sheet -> card -> panel -> chip),
+                so layering alone communicates depth. No drop shadows are needed on glass.
+    3. INK    - type and the accent sit on top at full strength. Every text colour here
+                clears 4.5:1 against the lightest glass it can land on, because this is a
+                safety app and a hint that fails contrast is a hint nobody reads.
+
+  Colours are stated as #AARRGGBB. A translucent token always fades toward its OWN rgb
+  (e.g. #000A6CFC, not #00000000) - fading to transparent-black is what puts a grey halo
+  around a gradient.
 -->
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- Accent. The single colour the app spends on interaction. -->
-    <color name="brand_primary">#0071E3</color>
-    <color name="brand_primary_dark">#0058B8</color>
-    <color name="brand_primary_light">#3395E8</color>
-    <color name="brand_primary_container">#E8F2FD</color>
-    <color name="brand_on_primary_container">#0058B8</color>
-    <color name="brand_border_soft">#D2E3F7</color>
+    <!-- ===================== Brand: the logo blue ===================== -->
+    <color name="brand_primary">#0A6CFC</color>
+    <color name="brand_primary_dark">#0052E0</color>
+    <color name="brand_primary_light">#4D97FF</color>
+    <!-- Tinted glass, not a solid fill: chips and branded cards are still see-through. -->
+    <color name="brand_primary_container">#240A6CFC</color>
+    <color name="brand_on_primary_container">#0B47B0</color>
+    <color name="brand_border_soft">#590A6CFC</color>
 
-    <!-- Header band tints. Superseded by bg_header_hero / bg_header_danger; kept because
-         removing them would mean editing layouts that still resolve against them. -->
-    <color name="gradient_hero_start">#F5F5F7</color>
-    <color name="gradient_hero_end">#F5F5F7</color>
-    <color name="gradient_danger_start">#FDECEC</color>
-    <color name="gradient_danger_end">#FDECEC</color>
+    <!-- ===================== The field ===================== -->
+    <!-- Base wash, top to bottom. Kept within a few points of white so the blooms are the
+         only thing with real colour in the background. -->
+    <color name="page_top">#EFF4FF</color>
+    <color name="page_mid">#F8FAFF</color>
+    <color name="page_bottom">#E7EFFC</color>
 
-    <!-- Formerly "text on a gradient card". Those cards are light now, so these are simply
-         the on-light text ramp. Names kept so all 13 layouts keep resolving untouched. -->
-    <color name="on_gradient">#1D1D1F</color>
-    <color name="on_gradient_muted">#86868B</color>
-    <color name="on_gradient_faint">#A1A1A6</color>
-    <color name="on_gradient_pill">#FFFFFF</color>
-    <color name="on_gradient_hairline">#E3E3E8</color>
+    <!-- Blooms. Each pairs with a *_clear that is the same rgb at alpha 0. -->
+    <color name="bloom_brand">#4D0A6CFC</color>
+    <color name="bloom_brand_soft">#330A6CFC</color>
+    <color name="bloom_brand_clear">#000A6CFC</color>
+    <color name="bloom_sky">#4700A3FF</color>
+    <color name="bloom_sky_clear">#0000A3FF</color>
+    <color name="bloom_white">#B3FFFFFF</color>
+    <color name="bloom_white_clear">#00FFFFFF</color>
 
-    <!-- Formerly the dark frosted control bar. Now Apple's grouped-content surface: a
-         quiet inset panel that groups controls without shouting over the content. -->
-    <color name="frosted_dark_surface">#FFFFFF</color>
-    <color name="frosted_dark_border">#E3E3E8</color>
-    <color name="frosted_chip_fill">#EFEFF4</color>
+    <!-- ===================== The glass ===================== -->
+    <!-- Sheet: the full-height hero surface. Deliberately the thinnest glass in the app so
+         the blooms behind it stay visible instead of being washed out. -->
+    <color name="glass_sheet_top">#8FFFFFFF</color>
+    <color name="glass_sheet_bottom">#59FFFFFF</color>
 
-    <!-- Status. Accessible variants: white-on-fill clears 4.5:1 on all three. -->
+    <!-- Card: content that has to be read. -->
+    <color name="glass_card_top">#D6FFFFFF</color>
+    <color name="glass_card_bottom">#A8FFFFFF</color>
+
+    <!-- Panel: grouped controls, the most solid tier. -->
+    <color name="glass_sheen_top">#E6FFFFFF</color>
+    <color name="glass_sheen_bottom">#B8FFFFFF</color>
+
+    <!-- Wells (inputs) invert the sheen - darker at the top - so they read as recessed
+         rather than raised. That inversion is the only cue a flat XML shape has. -->
+    <color name="glass_well_top">#66E2EAF7</color>
+    <color name="glass_well_bottom">#CCFFFFFF</color>
+
+    <!-- Rims. The outer rim is the lit edge of the glass; the inner one, offset 1dp, is
+         what gives the edge thickness instead of looking like a drawn border. -->
+    <color name="glass_rim">#B3FFFFFF</color>
+    <color name="glass_rim_inner">#59FFFFFF</color>
+
+    <!-- Tinted glass for the header bands. -->
+    <color name="header_glass_top">#420A6CFC</color>
+    <color name="header_glass_bottom">#1A0A6CFC</color>
+    <color name="header_danger_top">#33D70015</color>
+    <color name="header_danger_bottom">#14D70015</color>
+
+    <!-- ===================== Ink ===================== -->
+    <color name="text_primary">#0B1526</color>
+    <color name="text_body">#33425A</color>
+    <color name="text_secondary">#4C5B72</color>
+    <!-- 4.7:1 on the lightest glass. The old hint grey was 2.3:1 - legible on a mockup,
+         not on a phone held at arm's length in a loud room. -->
+    <color name="text_hint">#5F6E84</color>
+
+    <!-- Text sitting on a glass panel. Same ramp; separate names because the layouts
+         address them separately and dark mode moves them differently. -->
+    <color name="on_gradient">#0B1526</color>
+    <color name="on_gradient_muted">#4C5B72</color>
+    <color name="on_gradient_faint">#7C8AA0</color>
+    <color name="on_gradient_pill">#CCFFFFFF</color>
+    <color name="on_gradient_hairline">#1F2F5480</color>
+
+    <!-- ===================== Status ===================== -->
     <color name="danger">#D70015</color>
-    <color name="danger_dark_text">#A5000F</color>
-    <color name="danger_body_text">#7A000B</color>
-    <color name="danger_container">#FDECEC</color>
-    <color name="danger_border">#F7C9C9</color>
+    <color name="danger_dark_text">#9E0010</color>
+    <color name="danger_body_text">#7A0410</color>
+    <color name="danger_container">#26D70015</color>
+    <color name="danger_border">#59D70015</color>
 
-    <color name="success">#248A3D</color>
-    <color name="success_container">#E9F7EC</color>
-    <color name="success_border">#C2E6CB</color>
+    <color name="success">#1C7C36</color>
+    <color name="success_container">#241C7C36</color>
+    <color name="success_border">#591C7C36</color>
 
-    <color name="warning">#B25000</color>
-    <color name="warning_dark_text">#8A4200</color>
-    <color name="warning_body_text">#8A4200</color>
-    <color name="warning_container">#FFF4E8</color>
-    <color name="warning_border">#F5DBBE</color>
+    <color name="warning">#9A4A00</color>
+    <color name="warning_dark_text">#8A3E00</color>
+    <color name="warning_body_text">#7A3800</color>
+    <color name="warning_container">#1FFF9500</color>
+    <color name="warning_border">#4DE08600</color>
 
-    <!-- Text ramp -->
-    <color name="text_primary">#1D1D1F</color>
-    <color name="text_body">#424245</color>
-    <color name="text_secondary">#86868B</color>
-    <color name="text_hint">#A1A1A6</color>
+    <!-- ===================== Surfaces (token names kept from the old system) ===================== -->
+    <color name="card_surface">#CCFFFFFF</color>
+    <color name="surface">#EFF4FF</color>
+    <color name="surface_alt">#CCFFFFFF</color>
+    <!-- Doubles as a hairline stroke AND as the divider Views in the layouts, so it has to
+         be ink-tinted rather than white - a white line is invisible on white glass. -->
+    <color name="border_light">#26355C8C</color>
 
-    <!-- Surfaces -->
-    <color name="card_surface">#FFFFFF</color>
-    <color name="surface">#F2F2F7</color>
-    <color name="surface_alt">#FFFFFF</color>
-    <color name="border_light">#E3E3E8</color>
+    <color name="frosted_dark_surface">#B8FFFFFF</color>
+    <color name="frosted_dark_border">#B3FFFFFF</color>
+    <color name="frosted_chip_fill">#A6FFFFFF</color>
 
-    <!-- Shadow tint. Apple's shadow is neutral and barely there (0 4px 24px rgba(0,0,0,.06)) -
-         depth comes from a soft neutral lift, never a coloured bloom. Names kept from the
-         previous glow system so existing style references keep resolving. -->
-    <color name="brand_glow">#1D1D1F</color>
-    <color name="danger_glow">#1D1D1F</color>
-    <color name="success_glow">#1D1D1F</color>
-    <color name="card_glow">#1D1D1F</color>
-    <color name="glass_pill_glow">#1D1D1F</color>
+    <!-- ===================== Depth ===================== -->
+    <!-- Glass gets no shadow; solid pills do, and theirs is tinted with their own hue so it
+         reads as light spilling out from under the button (API 28+; black below that). -->
+    <color name="brand_glow">#0A6CFC</color>
+    <color name="danger_glow">#D70015</color>
+    <color name="success_glow">#1C7C36</color>
+    <color name="card_glow">#2A4A78</color>
+    <color name="glass_pill_glow">#2A4A78</color>
 
-    <!-- Secondary "filled grey" control, Apple's standard non-primary button material. -->
-    <color name="glass_fill">#E9E9EE</color>
-    <color name="glass_ripple">#DEDEE3</color>
+    <!-- Secondary control material: glass, with a rim, so it belongs to the same family as
+         the surfaces instead of being a grey Material button. -->
+    <color name="glass_fill">#A6FFFFFF</color>
+    <color name="glass_ripple">#3D0A6CFC</color>
+    <color name="glass_border">#8AFFFFFF</color>
+    <color name="glass_border_strong">#59839FC4</color>
 
-    <!-- Hairlines. 5% ink, matching the card spec's 1px solid rgba(0,0,0,0.05). -->
-    <color name="glass_border">#0D000000</color>
-    <color name="glass_border_strong">#1F000000</color>
+    <color name="switch_track_off">#596B7A90</color>
 
-    <!-- Dialogs sit above a genuinely blurred page (util/GlassBlur.java, API 31+), so the
-         surface stays a hair short of opaque and lets that blur read through. -->
-    <color name="dialog_glass_surface">#F2FFFFFF</color>
+    <!-- Dialogs float over a genuinely Gaussian-blurred page (util/GlassBlur.java, API 31+),
+         so this stays short of opaque and lets that blur read through. -->
+    <color name="dialog_glass_surface">#F0F7FAFF</color>
 </resources>

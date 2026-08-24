@@ -1,224 +1,390 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- StaffDashboardView. Chunking: five actions become two labelled groups plus one
+     destructive action held apart, so nothing lands next to End Event by accident. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/staff_dashboard"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/surface"
-    android:clipToPadding="false"
-    android:fillViewport="true">
+    android:background="@drawable/bg_page_glass"
+    android:orientation="vertical">
 
+    <!-- Nav bar: navigation root, so no back chevron - Live pill then gear, trailing. -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clipToPadding="false"
-        android:orientation="vertical"
-        android:paddingStart="20dp"
-        android:paddingTop="44dp"
-        android:paddingEnd="20dp"
-        android:paddingBottom="28dp">
+        android:layout_height="44dp"
+        android:gravity="end|center_vertical"
+        android:orientation="horizontal"
+        android:paddingEnd="8dp">
 
-        <!-- Gradient header card carries the event identity. The action cards below stay
-             calm and legible - this is a live safety console. -->
+        <TextView
+            android:id="@+id/staff_live_pill"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_ios_pill_green"
+            android:drawableStart="@drawable/ic_sf_dot_radiowaves"
+            android:drawablePadding="5dp"
+            android:drawableTint="@color/success"
+            android:gravity="center_vertical"
+            android:paddingStart="10dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="5dp"
+            android:text="Live"
+            android:textColor="@color/success"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/staff_settings_button"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Settings"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_sf_gearshape_fill"
+            android:tint="@color/brand_primary" />
+    </LinearLayout>
+
+    <!-- Large title -->
+    <TextView
+        android:id="@+id/staff_dashboard_event_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="8dp"
+        android:text="FirstLink"
+        android:textColor="@color/text_primary"
+        android:textSize="34sp"
+        android:textStyle="bold" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:fillViewport="true">
+
         <LinearLayout
-            android:id="@+id/staff_dashboard_header_card"
-            style="@style/Widget.FirstLink.HeaderCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="24dp">
+            android:paddingBottom="40dp">
+
+            <!-- Recovery path: the approved call follows staff home. -->
+            <com.example.firstlink.widget.DraggableMaterialButton
+                android:id="@+id/call_911_approved_button"
+                style="@style/Widget.FirstLink.Button.Primary"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="4dp"
+                android:elevation="0dp"
+                android:insetBottom="0dp"
+                android:insetTop="0dp"
+                android:stateListAnimator="@null"
+                android:text="911 Approved — Call Now"
+                android:textColor="@color/white"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:backgroundTint="@color/danger"
+                app:cornerRadius="28dp"
+                app:elevation="0dp"
+                app:icon="@drawable/ic_sf_phone_fill"
+                app:iconGravity="textStart"
+                app:iconPadding="8dp"
+                app:iconSize="20dp"
+                app:iconTint="@color/white"
+                app:strokeWidth="0dp" />
 
             <TextView
-                style="@style/TextAppearance.FirstLink.Eyebrow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Staff dashboard"
-                android:textColor="@color/on_gradient_muted" />
-
-            <TextView
-                android:id="@+id/staff_dashboard_event_name"
-                style="@style/TextAppearance.FirstLink.Hero"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Summer Hackathon" />
-
-            <!-- Frosted status strip: a floating control/status element, not a content surface. -->
-            <LinearLayout
-                style="@style/Widget.FirstLink.FrostedBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingStart="14dp"
-                android:paddingTop="8dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="8dp">
-
-                <TextView
-                    android:id="@+id/staff_dashboard_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="● Event Live"
-                    android:textColor="@color/on_gradient"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:text="•"
-                    android:textColor="@color/on_gradient_faint"
-                    android:textSize="13sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Staff access"
-                    android:textColor="@color/on_gradient_muted"
-                    android:textSize="13sp" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/call_911_approved_button"
-            style="@style/Widget.FirstLink.Button.Success"
-            android:layout_width="match_parent"
-            android:layout_height="58dp"
-            android:layout_marginTop="16dp"
-            android:text="911 Approved — Call Now"
-            android:textSize="17sp"
-            android:textStyle="bold"
-            android:visibility="gone" />
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/staff_dashboard_emergency_card"
-            style="@style/Widget.FirstLink.Card"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
-            app:cardBackgroundColor="@color/danger_container"
-            app:strokeColor="@color/danger_border">
+                android:layout_marginStart="36dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="36dp"
+                android:layout_marginBottom="7dp"
+                android:letterSpacing="0.04"
+                android:text="Live incidents"
+                android:textAllCaps="true"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="22dp">
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/bg_ios_group"
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/staff_dashboard_emergency_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Emergency"
-                    android:textColor="@color/danger_dark_text"
-                    android:textSize="21sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/staff_dashboard_emergency_description"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="Report emergencies or view all active incidents."
-                    android:textColor="@color/danger_body_text"
-                    android:textSize="14sp" />
-
-                <com.google.android.material.button.MaterialButton
+                <com.example.firstlink.widget.DraggableMaterialButton
                     android:id="@+id/staff_dashboard_report_emergency_button"
-                    style="@style/Widget.FirstLink.Button.Danger"
+                    style="@style/Widget.FirstLink.Button.Primary"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:layout_marginTop="18dp"
+                    android:layout_height="52dp"
+                    android:elevation="0dp"
+                    android:gravity="start|center_vertical"
+                    android:insetBottom="0dp"
+                    android:insetTop="0dp"
+                    android:minHeight="44dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:stateListAnimator="@null"
                     android:text="Report Emergency"
-                    android:textSize="17sp"
-                    android:textStyle="bold" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/staff_dashboard_show_emergencies_button"
-                    style="@style/Widget.FirstLink.Button.Outlined"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:layout_marginTop="10dp"
-                    android:text="View Active Emergencies"
+                    android:textAlignment="textStart"
                     android:textColor="@color/danger"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@android:color/transparent"
+                    app:cornerRadius="0dp"
+                    app:elevation="0dp"
+                    app:icon="@drawable/ic_sf_exclamationmark_triangle_fill"
+                    app:iconGravity="textStart"
+                    app:iconPadding="12dp"
+                    app:iconSize="22dp"
+                    app:iconTint="@color/danger"
+                    app:strokeWidth="0dp" />
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/bg_ios_separator" />
+
+                <!-- Zeigarnik: the unresolved count is what brings staff back. -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.example.firstlink.widget.DraggableMaterialButton
+                        android:id="@+id/staff_dashboard_show_emergencies_button"
+                        style="@style/Widget.FirstLink.Button.Primary"
+                        android:layout_width="0dp"
+                        android:layout_height="52dp"
+                        android:layout_weight="1"
+                        android:elevation="0dp"
+                        android:gravity="start|center_vertical"
+                        android:insetBottom="0dp"
+                        android:insetTop="0dp"
+                        android:minHeight="44dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:stateListAnimator="@null"
+                        android:text="Active Emergencies"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/text_primary"
+                        android:textSize="17sp"
+                        app:backgroundTint="@android:color/transparent"
+                        app:cornerRadius="0dp"
+                        app:elevation="0dp"
+                        app:icon="@drawable/ic_sf_list_bullet_rectangle"
+                        app:iconGravity="textStart"
+                        app:iconPadding="12dp"
+                        app:iconSize="22dp"
+                        app:iconTint="@color/brand_primary"
+                        app:strokeWidth="0dp" />
+
+                    <!-- Zeigarnik: iOS shows an unresolved count here. StaffDashboardActivity
+                         never binds it, so it ships hidden rather than showing a fake number. -->
+                    <TextView
+                        android:id="@+id/staff_dashboard_emergency_badge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/bg_ios_badge_red"
+                        android:paddingStart="9dp"
+                        android:paddingTop="3dp"
+                        android:paddingEnd="9dp"
+                        android:paddingBottom="3dp"
+                        android:textColor="@color/white"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_marginEnd="16dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_sf_chevron_right"
+                        android:tint="@color/text_hint" />
+                </LinearLayout>
             </LinearLayout>
 
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/staff_dashboard_help_card"
-            style="@style/Widget.FirstLink.Card"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            app:cardBackgroundColor="@color/brand_primary_container"
-            app:strokeColor="@color/brand_border_soft">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="36dp"
+                android:layout_marginTop="28dp"
+                android:layout_marginEnd="36dp"
+                android:layout_marginBottom="7dp"
+                android:letterSpacing="0.04"
+                android:text="Attendee requests"
+                android:textAllCaps="true"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="22dp">
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/bg_ios_group"
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/staff_dashboard_help_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Help Requests"
-                    android:textColor="@color/brand_on_primary_container"
-                    android:textSize="21sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/staff_dashboard_help_description"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="Handle attendee assistance requests."
-                    android:textColor="@color/text_body"
-                    android:textSize="14sp" />
-
-                <com.google.android.material.button.MaterialButton
+                <com.example.firstlink.widget.DraggableMaterialButton
                     android:id="@+id/staff_dashboard_request_help_button"
                     style="@style/Widget.FirstLink.Button.Primary"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:layout_marginTop="18dp"
+                    android:layout_height="52dp"
+                    android:elevation="0dp"
+                    android:gravity="start|center_vertical"
+                    android:insetBottom="0dp"
+                    android:insetTop="0dp"
+                    android:minHeight="44dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:stateListAnimator="@null"
                     android:text="Request Help"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/text_primary"
                     android:textSize="17sp"
-                    android:textStyle="bold" />
+                    app:backgroundTint="@android:color/transparent"
+                    app:cornerRadius="0dp"
+                    app:elevation="0dp"
+                    app:icon="@drawable/ic_sf_hand_raised_fill"
+                    app:iconGravity="textStart"
+                    app:iconPadding="12dp"
+                    app:iconSize="22dp"
+                    app:iconTint="@color/brand_primary"
+                    app:strokeWidth="0dp" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/staff_dashboard_show_help_button"
-                    style="@style/Widget.FirstLink.Button.Outlined"
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:layout_marginTop="10dp"
-                    android:text="View Help Requests"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:layout_height="1dp"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/bg_ios_separator" />
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.example.firstlink.widget.DraggableMaterialButton
+                        android:id="@+id/staff_dashboard_show_help_button"
+                        style="@style/Widget.FirstLink.Button.Primary"
+                        android:layout_width="0dp"
+                        android:layout_height="52dp"
+                        android:layout_weight="1"
+                        android:elevation="0dp"
+                        android:gravity="start|center_vertical"
+                        android:insetBottom="0dp"
+                        android:insetTop="0dp"
+                        android:minHeight="44dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:stateListAnimator="@null"
+                        android:text="Help Requests"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/text_primary"
+                        android:textSize="17sp"
+                        app:backgroundTint="@android:color/transparent"
+                        app:cornerRadius="0dp"
+                        app:elevation="0dp"
+                        app:icon="@drawable/ic_sf_tray_full"
+                        app:iconGravity="textStart"
+                        app:iconPadding="12dp"
+                        app:iconSize="22dp"
+                        app:iconTint="@color/brand_primary"
+                        app:strokeWidth="0dp" />
+
+                    <!-- Zeigarnik: iOS shows an unresolved count here. StaffDashboardActivity
+                         never binds it, so it ships hidden rather than showing a fake number. -->
+                    <TextView
+                        android:id="@+id/staff_dashboard_help_badge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/bg_ios_badge_blue"
+                        android:paddingStart="9dp"
+                        android:paddingTop="3dp"
+                        android:paddingEnd="9dp"
+                        android:paddingBottom="3dp"
+                        android:textColor="@color/white"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_marginEnd="16dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_sf_chevron_right"
+                        android:tint="@color/text_hint" />
+                </LinearLayout>
             </LinearLayout>
 
-        </com.google.android.material.card.MaterialCardView>
+            <!-- Destructive action, held apart in its own group. -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="28dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/bg_ios_group"
+                android:orientation="vertical">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/staff_dashboard_end_event_button"
-            style="@style/Widget.FirstLink.Button.Neutral"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="20dp"
-            android:text="End Event"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+                <com.example.firstlink.widget.DraggableMaterialButton
+                    android:id="@+id/staff_dashboard_end_event_button"
+                    style="@style/Widget.FirstLink.Button.Primary"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:elevation="0dp"
+                    android:gravity="start|center_vertical"
+                    android:insetBottom="0dp"
+                    android:insetTop="0dp"
+                    android:minHeight="44dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:stateListAnimator="@null"
+                    android:text="End Event"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/danger"
+                    android:textSize="17sp"
+                    app:backgroundTint="@android:color/transparent"
+                    app:cornerRadius="0dp"
+                    app:elevation="0dp"
+                    app:icon="@drawable/ic_sf_stop_circle"
+                    app:iconGravity="textStart"
+                    app:iconPadding="12dp"
+                    app:iconSize="22dp"
+                    app:iconTint="@color/danger"
+                    app:strokeWidth="0dp" />
+            </LinearLayout>
 
-    </LinearLayout>
-
-</ScrollView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="36dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginEnd="36dp"
+                android:lineSpacingMultiplier="1.25"
+                android:text="Ends the event for everyone and stops both join codes working."
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Grouping surface for a set of radio buttons or checkboxes. Quieter than a panel: it
+     only needs to say "these options belong together", not to lift off the page. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <corners android:radius="20dp" />
+    <gradient
+        android:angle="270"
+        android:endColor="@color/glass_sheet_bottom"
+        android:startColor="@color/glass_sheet_top"
+        android:type="linear" />
+    <stroke
+        android:width="1dp"
+        android:color="@color/glass_rim_inner" />
+</shape>

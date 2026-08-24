@@ -1,79 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Dark palette. Every token in values/colors.xml is restated here, which is the whole reason
-  dark mode costs one file instead of sixteen: no layout hardcodes a colour, so overriding
-  the tokens re-skins the entire app.
+  Dark glass. Every token in values/colors.xml is restated here, which is why dark mode
+  costs one file instead of sixteen: no layout hardcodes a colour, so re-pointing the
+  tokens re-skins the whole app.
 
-  Apple's dark mode is true black for the page with a raised near-black for grouped content,
-  and the accent brightens (#0071E3 -> #0A84FF) because a mid-blue that reads as confident on
-  white goes muddy on black. Status colours switch to the dark members of the system palette
-  for the same reason.
+  Two things flip, and only two:
+    - The field goes near-black and the blooms of logo blue get *brighter*, not dimmer.
+      A dark glassmorphic page is mostly the blooms; drop them and the glass has nothing
+      to hold.
+    - Glass stops being white-at-70% and becomes white-at-10%. The rim does the work
+      instead of the fill, so rim alpha roughly doubles relative to the fill.
+
+  The accent lifts #0A6CFC -> #0A84FF for the same reason Apple's does: a mid-blue that
+  reads as confident on white goes muddy on black.
 -->
 <resources>
     <color name="brand_primary">#0A84FF</color>
-    <color name="brand_primary_dark">#0060D0</color>
-    <color name="brand_primary_light">#4DA3FF</color>
-    <color name="brand_primary_container">#0A2540</color>
+    <color name="brand_primary_dark">#0060D8</color>
+    <color name="brand_primary_light">#5AACFF</color>
+    <color name="brand_primary_container">#330A84FF</color>
     <color name="brand_on_primary_container">#9CCBFF</color>
-    <color name="brand_border_soft">#1F3A57</color>
+    <color name="brand_border_soft">#660A84FF</color>
 
-    <color name="gradient_hero_start">#1C1C1E</color>
-    <color name="gradient_hero_end">#1C1C1E</color>
-    <color name="gradient_danger_start">#2C1618</color>
-    <color name="gradient_danger_end">#2C1618</color>
+    <color name="page_top">#080C15</color>
+    <color name="page_mid">#0A1019</color>
+    <color name="page_bottom">#04070E</color>
 
-    <color name="on_gradient">#F5F5F7</color>
-    <color name="on_gradient_muted">#98989D</color>
-    <color name="on_gradient_faint">#6E6E73</color>
-    <color name="on_gradient_pill">#1C1C1E</color>
-    <color name="on_gradient_hairline">#2C2C2E</color>
+    <color name="bloom_brand">#660A84FF</color>
+    <color name="bloom_brand_soft">#3D0A84FF</color>
+    <color name="bloom_brand_clear">#000A84FF</color>
+    <color name="bloom_sky">#4D3D7DFF</color>
+    <color name="bloom_sky_clear">#003D7DFF</color>
+    <color name="bloom_white">#1FFFFFFF</color>
+    <color name="bloom_white_clear">#00FFFFFF</color>
 
-    <color name="frosted_dark_surface">#1C1C1E</color>
-    <color name="frosted_dark_border">#2C2C2E</color>
-    <color name="frosted_chip_fill">#2C2C2E</color>
+    <color name="glass_sheet_top">#1AFFFFFF</color>
+    <color name="glass_sheet_bottom">#0DFFFFFF</color>
 
-    <!-- Dark system red/green/orange. Button labels here are 17sp bold, which WCAG counts as
-         large text (3:1), so these clear the bar at the size they are actually used. -->
+    <color name="glass_card_top">#26FFFFFF</color>
+    <color name="glass_card_bottom">#14FFFFFF</color>
+
+    <color name="glass_sheen_top">#2EFFFFFF</color>
+    <color name="glass_sheen_bottom">#1AFFFFFF</color>
+
+    <color name="glass_well_top">#3D000814</color>
+    <color name="glass_well_bottom">#14FFFFFF</color>
+
+    <color name="glass_rim">#40FFFFFF</color>
+    <color name="glass_rim_inner">#1FFFFFFF</color>
+
+    <color name="header_glass_top">#4D0A84FF</color>
+    <color name="header_glass_bottom">#1F0A84FF</color>
+    <color name="header_danger_top">#40FF453A</color>
+    <color name="header_danger_bottom">#1AFF453A</color>
+
+    <color name="text_primary">#F2F6FF</color>
+    <color name="text_body">#C6D0DE</color>
+    <color name="text_secondary">#A3AFC0</color>
+    <color name="text_hint">#8B98AB</color>
+
+    <color name="on_gradient">#F2F6FF</color>
+    <color name="on_gradient_muted">#A3AFC0</color>
+    <color name="on_gradient_faint">#78869A</color>
+    <color name="on_gradient_pill">#2EFFFFFF</color>
+    <color name="on_gradient_hairline">#26FFFFFF</color>
+
+    <!-- Dark system red/green/orange. Button labels using these are 17sp bold, which WCAG
+         counts as large text (3:1), so they clear the bar at the size they are used. -->
     <color name="danger">#FF453A</color>
-    <color name="danger_dark_text">#FF6961</color>
-    <color name="danger_body_text">#FF8A80</color>
-    <color name="danger_container">#2C1618</color>
-    <color name="danger_border">#48221F</color>
+    <color name="danger_dark_text">#FF7A72</color>
+    <color name="danger_body_text">#FFA39D</color>
+    <color name="danger_container">#33FF453A</color>
+    <color name="danger_border">#66FF453A</color>
 
     <color name="success">#30D158</color>
-    <color name="success_container">#12271A</color>
-    <color name="success_border">#1F4429</color>
+    <color name="success_container">#2E30D158</color>
+    <color name="success_border">#6630D158</color>
 
     <color name="warning">#FF9F0A</color>
-    <color name="warning_dark_text">#FFB340</color>
-    <color name="warning_body_text">#FFB340</color>
-    <color name="warning_container">#2A1F0A</color>
-    <color name="warning_border">#4A3612</color>
+    <color name="warning_dark_text">#FFBC55</color>
+    <color name="warning_body_text">#FFCC80</color>
+    <color name="warning_container">#2EFF9F0A</color>
+    <color name="warning_border">#66FF9F0A</color>
 
-    <color name="text_primary">#F5F5F7</color>
-    <color name="text_body">#D1D1D6</color>
-    <color name="text_secondary">#98989D</color>
-    <color name="text_hint">#6E6E73</color>
+    <color name="card_surface">#1FFFFFFF</color>
+    <color name="surface">#080C15</color>
+    <color name="surface_alt">#1FFFFFFF</color>
+    <color name="border_light">#33FFFFFF</color>
 
-    <color name="card_surface">#1C1C1E</color>
-    <color name="surface">#000000</color>
-    <color name="surface_alt">#1C1C1E</color>
-    <color name="border_light">#2C2C2E</color>
+    <color name="frosted_dark_surface">#1FFFFFFF</color>
+    <color name="frosted_dark_border">#40FFFFFF</color>
+    <color name="frosted_chip_fill">#1AFFFFFF</color>
 
-    <!-- A cast shadow does no work on a black page; depth here comes from the raised
-         surface colour instead. -->
-    <color name="brand_glow">#000000</color>
-    <color name="danger_glow">#000000</color>
-    <color name="success_glow">#000000</color>
+    <!-- The blue glow under a primary pill is the one piece of depth that gets *more*
+         useful on black, so it stays. Neutral surfaces drop their shadow entirely -
+         a cast shadow does no work on a near-black page. -->
+    <color name="brand_glow">#0A84FF</color>
+    <color name="danger_glow">#FF453A</color>
+    <color name="success_glow">#30D158</color>
     <color name="card_glow">#000000</color>
     <color name="glass_pill_glow">#000000</color>
 
-    <color name="glass_fill">#2C2C2E</color>
-    <color name="glass_ripple">#3A3A3C</color>
+    <color name="glass_fill">#24FFFFFF</color>
+    <color name="glass_ripple">#40FFFFFF</color>
+    <color name="glass_border">#33FFFFFF</color>
+    <color name="glass_border_strong">#4DFFFFFF</color>
 
-    <!-- Hairlines invert: light ink on a dark ground. -->
-    <color name="glass_border">#1FFFFFFF</color>
-    <color name="glass_border_strong">#33FFFFFF</color>
+    <color name="switch_track_off">#4D8593A6</color>
 
-    <color name="dialog_glass_surface">#F21C1C1E</color>
+    <color name="dialog_glass_surface">#EB141A26</color>
 </resources>

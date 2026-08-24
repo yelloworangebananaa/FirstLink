@@ -1,207 +1,374 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- ReportEmergencyView (Reporting.swift) — inset-grouped Form: Where / Patient / Details,
+     with a pinned red prominent action bar. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/attendee_emergency"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/surface"
-    android:clipToPadding="false"
-    android:fillViewport="true">
+    android:background="@drawable/bg_page_glass"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <!-- Nav bar: back chevron + inline centred title. -->
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clipToPadding="false"
-        android:orientation="vertical"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:paddingBottom="28dp">
+        android:layout_height="44dp"
+        android:layout_marginTop="8dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Report Emergency"
+            android:textColor="@color/text_primary"
+            android:textSize="17sp"
+            android:textStyle="bold" />
 
         <ImageButton
             android:id="@+id/back_button"
-            style="@style/Widget.FirstLink.BackButton"
             android:layout_width="44dp"
             android:layout_height="44dp"
-            android:layout_marginTop="16dp"
+            android:layout_gravity="start|center_vertical"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Back"
-            android:src="@drawable/ic_back" />
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_back"
+            android:tint="@color/brand_primary" />
+    </FrameLayout>
 
-        <!-- Danger-tinted header only. The form itself stays plain white and high-contrast:
-             this is filled in under stress and must never be decorative. -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
         <LinearLayout
-            android:id="@+id/attendee_emergency_header_card"
-            style="@style/Widget.FirstLink.HeaderCard.Danger"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:orientation="vertical"
-            android:padding="24dp">
+            android:paddingBottom="24dp">
 
+            <!-- ===================== WHERE ===================== -->
             <TextView
-                style="@style/TextAppearance.FirstLink.Eyebrow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Medical emergency"
-                android:textColor="@color/on_gradient_muted" />
-
-            <TextView
-                android:id="@+id/attendee_emergency_title"
-                style="@style/TextAppearance.FirstLink.Hero"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Report Emergency" />
-
-            <TextView
-                style="@style/TextAppearance.FirstLink.HeroBody"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="If someone is in danger right now, call 911 first." />
+                android:layout_marginStart="36dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="36dp"
+                android:layout_marginBottom="7dp"
+                android:letterSpacing="0.04"
+                android:text="Where"
+                android:textAllCaps="true"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/bg_ios_group"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="0dp"
+                        android:text="Location"
+                        android:textColor="@color/text_primary"
+                        android:textSize="17sp" />
+
+                    <Spinner
+                        android:id="@+id/attendee_emergency_location_spinner"
+                        android:layout_width="0dp"
+                        android:layout_height="44dp"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:dropDownVerticalOffset="6dp"
+                        android:dropDownWidth="match_parent"
+                        android:overlapAnchor="false"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:popupBackground="@drawable/bg_dropdown_glass" />
+
+                    <ImageView
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_marginEnd="16dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_sf_chevron_updown"
+                        android:tint="@color/text_hint" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <!-- ===================== PATIENT ===================== -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="36dp"
+                android:layout_marginTop="28dp"
+                android:layout_marginEnd="36dp"
+                android:layout_marginBottom="7dp"
+                android:letterSpacing="0.04"
+                android:text="Patient"
+                android:textAllCaps="true"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/bg_ios_group"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:minHeight="44dp"
+                    android:orientation="horizontal"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:text="Consciousness"
+                        android:textColor="@color/text_primary"
+                        android:textSize="17sp" />
+
+                    <com.example.firstlink.widget.DraggableRadioGroup
+                        android:id="@+id/attendee_emergency_consciousness_group"
+                        android:layout_width="0dp"
+                        android:layout_height="32dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_ios_seg_track"
+                        android:orientation="horizontal"
+                        android:padding="2dp">
+
+                        <RadioButton
+                            android:id="@+id/attendee_emergency_conscious"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_ios_seg_item"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:paddingStart="0dp"
+                            android:paddingEnd="0dp"
+                            android:text="Awake"
+                            android:textColor="@color/text_primary"
+                            android:textSize="13sp" />
+
+                        <RadioButton
+                            android:id="@+id/attendee_emergency_unconscious"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_ios_seg_item"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:paddingStart="0dp"
+                            android:paddingEnd="0dp"
+                            android:text="Out"
+                            android:textColor="@color/text_primary"
+                            android:textSize="13sp" />
+
+                        <RadioButton
+                            android:id="@+id/attendee_emergency_consciousness_unknown"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_ios_seg_item"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:paddingStart="0dp"
+                            android:paddingEnd="0dp"
+                            android:text="?"
+                            android:textColor="@color/text_primary"
+                            android:textSize="13sp" />
+                    </com.example.firstlink.widget.DraggableRadioGroup>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/bg_ios_separator" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:minHeight="44dp"
+                    android:orientation="horizontal"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:text="Breathing"
+                        android:textColor="@color/text_primary"
+                        android:textSize="17sp" />
+
+                    <com.example.firstlink.widget.DraggableRadioGroup
+                        android:id="@+id/attendee_emergency_breathing_group"
+                        android:layout_width="0dp"
+                        android:layout_height="32dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_ios_seg_track"
+                        android:orientation="horizontal"
+                        android:padding="2dp">
+
+                        <RadioButton
+                            android:id="@+id/attendee_emergency_breathing"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_ios_seg_item"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:paddingStart="0dp"
+                            android:paddingEnd="0dp"
+                            android:text="Yes"
+                            android:textColor="@color/text_primary"
+                            android:textSize="13sp" />
+
+                        <RadioButton
+                            android:id="@+id/attendee_emergency_not_breathing"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_ios_seg_item"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:paddingStart="0dp"
+                            android:paddingEnd="0dp"
+                            android:text="No"
+                            android:textColor="@color/text_primary"
+                            android:textSize="13sp" />
+
+                        <RadioButton
+                            android:id="@+id/attendee_emergency_breathing_unknown"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_ios_seg_item"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:paddingStart="0dp"
+                            android:paddingEnd="0dp"
+                            android:text="?"
+                            android:textColor="@color/text_primary"
+                            android:textSize="13sp" />
+                    </com.example.firstlink.widget.DraggableRadioGroup>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- ===================== DETAILS ===================== -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="36dp"
+                android:layout_marginTop="28dp"
+                android:layout_marginEnd="36dp"
+                android:layout_marginBottom="7dp"
+                android:letterSpacing="0.04"
+                android:text="Details"
+                android:textAllCaps="true"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/bg_ios_group"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/attendee_emergency_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:gravity="top|start"
+                    android:hint="Anything responders should know"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:lineSpacingMultiplier="1.25"
+                    android:maxLines="6"
+                    android:minHeight="88dp"
+                    android:padding="16dp"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_hint"
+                    android:textSize="17sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="36dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginEnd="36dp"
+                android:lineSpacingMultiplier="1.25"
+                android:text="Optional. Responders are alerted the moment you send."
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp" />
         </LinearLayout>
+    </ScrollView>
 
-        <TextView
-            android:id="@+id/attendee_emergency_location_label"
-            style="@style/TextAppearance.FirstLink.FieldLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:layout_marginTop="26dp"
-            android:text="Location" />
+    <!-- Pinned bottom action bar (safeAreaBar). -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="20dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="20dp">
 
-        <Spinner
-            android:id="@+id/attendee_emergency_location_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="58dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/bg_spinner"
-            android:paddingStart="18dp"
-            android:paddingEnd="46dp" />
-
-        <TextView
-            android:id="@+id/attendee_emergency_description_label"
-            style="@style/TextAppearance.FirstLink.FieldLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:layout_marginTop="22dp"
-            android:text="Description" />
-
-        <EditText
-            android:id="@+id/attendee_emergency_description"
-            android:layout_width="match_parent"
-            android:layout_height="130dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/bg_input_field"
-            android:gravity="top|start"
-            android:hint="Describe what is happening..."
-            android:inputType="textMultiLine"
-            android:lineSpacingExtra="3dp"
-            android:padding="18dp"
-            android:textColor="@color/text_primary"
-            android:textColorHint="@color/text_hint"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/attendee_emergency_consciousness_label"
-            style="@style/TextAppearance.FirstLink.FieldLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:layout_marginTop="22dp"
-            android:text="Consciousness" />
-
-        <RadioGroup
-            android:id="@+id/attendee_emergency_consciousness_group"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/attendee_emergency_conscious"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Conscious"
-                android:textColor="@color/text_primary"
-                android:textSize="14sp" />
-
-            <RadioButton
-                android:id="@+id/attendee_emergency_unconscious"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Unconscious"
-                android:textColor="@color/text_primary"
-                android:textSize="14sp" />
-
-            <RadioButton
-                android:id="@+id/attendee_emergency_consciousness_unknown"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Unknown"
-                android:textColor="@color/text_primary"
-                android:textSize="14sp" />
-
-        </RadioGroup>
-
-        <TextView
-            android:id="@+id/attendee_emergency_breathing_label"
-            style="@style/TextAppearance.FirstLink.FieldLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:layout_marginTop="18dp"
-            android:text="Breathing" />
-
-        <RadioGroup
-            android:id="@+id/attendee_emergency_breathing_group"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/attendee_emergency_breathing"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Breathing"
-                android:textColor="@color/text_primary"
-                android:textSize="14sp" />
-
-            <RadioButton
-                android:id="@+id/attendee_emergency_not_breathing"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Not Breathing"
-                android:textColor="@color/text_primary"
-                android:textSize="14sp" />
-
-            <RadioButton
-                android:id="@+id/attendee_emergency_breathing_unknown"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Unknown"
-                android:textColor="@color/text_primary"
-                android:textSize="14sp" />
-
-        </RadioGroup>
-
-        <com.google.android.material.button.MaterialButton
+        <com.example.firstlink.widget.DraggableMaterialButton
             android:id="@+id/attendee_emergency_send_button"
             style="@style/Widget.FirstLink.Button.Danger"
             android:layout_width="match_parent"
-            android:layout_height="62dp"
-            android:layout_marginTop="26dp"
+            android:layout_height="56dp"
+            android:elevation="0dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:stateListAnimator="@null"
             android:text="Send Emergency"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/danger"
+            app:cornerRadius="28dp"
+            app:elevation="0dp"
+            app:icon="@drawable/ic_sf_exclamationmark_triangle_fill"
+            app:iconGravity="textStart"
+            app:iconPadding="8dp"
+            app:iconSize="20dp"
+            app:iconTint="@color/white"
+            app:strokeWidth="0dp" />
     </LinearLayout>
-
-</ScrollView>
+</LinearLayout>
