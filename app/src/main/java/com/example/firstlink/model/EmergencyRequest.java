@@ -1,5 +1,7 @@
 package com.example.firstlink.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class EmergencyRequest {
@@ -25,16 +27,21 @@ public class EmergencyRequest {
     private String breathing;
     private long timestamp;
     private String status;
-    private String assignedResponderId;
-    private String assignedResponderName;
+    /** Display names of every responder who accepted. More than one may accept. */
+    private List<String> acceptedBy;
+    /** Same people, by uid — used to tell "did I accept this?" apart from a name clash. */
+    private List<String> acceptedUids;
     private String reporterName;
+    /** Base64 JPEG thumbnail from the camera, or null. */
+    private String photo;
 
     /** Required by Firestore's object mapper. */
     public EmergencyRequest() {
     }
 
     public EmergencyRequest(String eventId, String reporterRole, String location,
-                            String description, String consciousness, String breathing) {
+                            String description, String consciousness, String breathing,
+                            String photo) {
         this.id = UUID.randomUUID().toString();
         this.eventId = eventId;
         this.reporterRole = reporterRole;
@@ -42,6 +49,7 @@ public class EmergencyRequest {
         this.description = description;
         this.consciousness = consciousness;
         this.breathing = breathing;
+        this.photo = photo;
         this.timestamp = System.currentTimeMillis();
         this.status = STATUS_ACTIVE;
         this.callApprovalStatus = APPROVAL_NOT_REQUESTED;
@@ -143,19 +151,29 @@ public class EmergencyRequest {
         this.callApprovalStatus = callApprovalStatus;
     }
 
-    public String getAssignedResponderName() {
-        return assignedResponderName;
+    public List<String> getAcceptedBy() {
+        if (acceptedBy == null) acceptedBy = new ArrayList<>();
+        return acceptedBy;
     }
 
-    public void setAssignedResponderName(String assignedResponderName) {
-        this.assignedResponderName = assignedResponderName;
+    public void setAcceptedBy(List<String> acceptedBy) {
+        this.acceptedBy = acceptedBy;
     }
 
-    public String getAssignedResponderId() {
-        return assignedResponderId;
+    public List<String> getAcceptedUids() {
+        if (acceptedUids == null) acceptedUids = new ArrayList<>();
+        return acceptedUids;
     }
 
-    public void setAssignedResponderId(String assignedResponderId) {
-        this.assignedResponderId = assignedResponderId;
+    public void setAcceptedUids(List<String> acceptedUids) {
+        this.acceptedUids = acceptedUids;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }

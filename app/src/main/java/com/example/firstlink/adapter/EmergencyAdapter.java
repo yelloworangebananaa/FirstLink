@@ -1,8 +1,10 @@
 package com.example.firstlink.adapter;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -10,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.firstlink.R;
 import com.example.firstlink.model.EmergencyRequest;
+import com.example.firstlink.util.Photo;
 import com.google.android.material.button.MaterialButton;
 
 import java.text.DateFormat;
@@ -58,12 +61,13 @@ public class EmergencyAdapter extends RecyclerView.Adapter<EmergencyAdapter.View
         holder.time.setText("Reported at " + DateFormat.getTimeInstance(DateFormat.SHORT)
                 .format(new Date(emergency.getTimestamp())));
 
-        String responder = emergency.getAssignedResponderName();
-        boolean assigned = responder != null && !responder.trim().isEmpty();
+        List<String> acceptedBy = emergency.getAcceptedBy();
         holder.status.setText(emergency.getStatus()
-                + (assigned ? " — accepted by " + responder : "")
-                + (EmergencyRequest.STATUS_ACTIVE.equals(emergency.getStatus())
-                        ? " — tap to respond" : ""));
+                + (acceptedBy.isEmpty()
+                        ? " — tap to respond"
+                        : " — accepted by " + TextUtils.join(", ", acceptedBy)
+                          + " — tap to join"));
+        Photo.show(holder.photo, emergency.getPhoto());
 
         String reporter = emergency.getReporterName();
         holder.reporter.setText(reporter == null || reporter.trim().isEmpty()
@@ -144,6 +148,7 @@ public class EmergencyAdapter extends RecyclerView.Adapter<EmergencyAdapter.View
         final TextView time;
         final TextView status;
         final TextView reporter;
+        final ImageView photo;
         final MaterialButton resolveButton;
         final TextView approvalStatus;
         final View approvalButtons;
@@ -162,6 +167,7 @@ public class EmergencyAdapter extends RecyclerView.Adapter<EmergencyAdapter.View
             time = itemView.findViewById(R.id.item_emergency_time);
             status = itemView.findViewById(R.id.item_emergency_status);
             reporter = itemView.findViewById(R.id.item_emergency_reporter);
+            photo = itemView.findViewById(R.id.item_emergency_photo);
             resolveButton = itemView.findViewById(R.id.item_emergency_resolve_button);
         }
     }

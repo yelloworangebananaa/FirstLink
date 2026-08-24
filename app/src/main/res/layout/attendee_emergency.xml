@@ -335,6 +335,63 @@
                 android:text="Optional. Responders are alerted the moment you send."
                 android:textColor="@color/text_secondary"
                 android:textSize="13sp" />
+
+            <!-- ===================== PHOTO ===================== -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="36dp"
+                android:layout_marginTop="28dp"
+                android:layout_marginEnd="36dp"
+                android:layout_marginBottom="7dp"
+                android:letterSpacing="0.04"
+                android:text="Photo"
+                android:textAllCaps="true"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/bg_ios_group"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <com.example.firstlink.widget.DraggableMaterialButton
+                    android:id="@+id/attendee_emergency_photo_button"
+                    style="@style/Widget.FirstLink.Button.Outlined"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:elevation="0dp"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:stateListAnimator="@null"
+                    android:text="Add Photo"
+                    android:textColor="@color/brand_primary"
+                    android:textSize="15sp"
+                    app:backgroundTint="@color/card_surface"
+                    app:cornerRadius="22dp"
+                    app:elevation="0dp"
+                    app:icon="@drawable/ic_sf_camera_fill"
+                    app:iconGravity="textStart"
+                    app:iconPadding="8dp"
+                    app:iconSize="18dp"
+                    app:iconTint="@color/brand_primary"
+                    app:strokeColor="@color/border_light"
+                    app:strokeWidth="1dp" />
+
+                <ImageView
+                    android:id="@+id/attendee_emergency_photo_preview"
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp"
+                    android:layout_marginTop="12dp"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="Attached photo"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

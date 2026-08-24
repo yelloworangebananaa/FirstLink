@@ -38,6 +38,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation(libs.osmdroid.android)
     // Firebase — Firestore is the live data layer (see FIREBASE_SETUP.md).
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)

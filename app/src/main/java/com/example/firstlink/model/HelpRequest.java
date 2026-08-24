@@ -1,5 +1,7 @@
 package com.example.firstlink.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class HelpRequest {
@@ -11,6 +13,16 @@ public class HelpRequest {
     private String eventId;
     private String location;
     private String description;
+    /** Preset problem the organizer defined, e.g. "Water problem". Empty when free-text only. */
+    private String problem;
+    /** Base64 JPEG thumbnail from the camera, or null. */
+    private String photo;
+    /** Firebase Auth uid of whoever sent it, so their device can recognise its own request. */
+    private String requesterUid;
+    /** Display names of every staff member who accepted. More than one may accept. */
+    private List<String> acceptedBy;
+    /** Same people, by uid — used to decide who may see the contact for this problem. */
+    private List<String> acceptedUids;
     private long timestamp;
     private String status;
 
@@ -18,11 +30,14 @@ public class HelpRequest {
     public HelpRequest() {
     }
 
-    public HelpRequest(String eventId, String location, String description) {
+    public HelpRequest(String eventId, String location, String description,
+                       String problem, String photo) {
         this.id = UUID.randomUUID().toString();
         this.eventId = eventId;
         this.location = location;
         this.description = description;
+        this.problem = problem;
+        this.photo = photo;
         this.timestamp = System.currentTimeMillis();
         this.status = STATUS_OPEN;
     }
@@ -57,6 +72,48 @@ public class HelpRequest {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getProblem() {
+        return problem;
+    }
+
+    public void setProblem(String problem) {
+        this.problem = problem;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    public String getRequesterUid() {
+        return requesterUid;
+    }
+
+    public void setRequesterUid(String requesterUid) {
+        this.requesterUid = requesterUid;
+    }
+
+    public List<String> getAcceptedBy() {
+        if (acceptedBy == null) acceptedBy = new ArrayList<>();
+        return acceptedBy;
+    }
+
+    public void setAcceptedBy(List<String> acceptedBy) {
+        this.acceptedBy = acceptedBy;
+    }
+
+    public List<String> getAcceptedUids() {
+        if (acceptedUids == null) acceptedUids = new ArrayList<>();
+        return acceptedUids;
+    }
+
+    public void setAcceptedUids(List<String> acceptedUids) {
+        this.acceptedUids = acceptedUids;
     }
 
     public long getTimestamp() {

@@ -57,10 +57,20 @@ public class AttendeeMainDashboardActivity extends AppCompatActivity {
             public void run() {
                 bailOutIfEventEnded();
                 showApprovedCallIfAny();
+                showMyReportStatus();
             }
         });
         bailOutIfEventEnded();
         showApprovedCallIfAny();
+        showMyReportStatus();
+    }
+
+    /** Who picked up the report this device sent, if anyone has yet. */
+    private void showMyReportStatus() {
+        String summary = FirstLinkRepository.get(this).getMyReportAcceptedSummary();
+        TextView banner = findViewById(R.id.my_report_status);
+        banner.setVisibility(summary == null ? View.GONE : View.VISIBLE);
+        banner.setText(summary);
     }
 
     /** Recovery path: the organizer approved after the reporter left the report screen. */

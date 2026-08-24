@@ -15,6 +15,8 @@ public class User {
     private String name;
     private List<String> qualifications;
     private boolean qualifiedResponder;
+    /** Set when they joined with a contact code: the problem they are on the hook for. */
+    private String contactFor;
 
     /** Required by Firestore's object mapper. */
     public User() {
@@ -78,6 +80,14 @@ public class User {
 
     public void setQualifications(List<String> qualifications) {
         this.qualifications = qualifications;
+    }
+
+    public String getContactFor() {
+        return contactFor;
+    }
+
+    public void setContactFor(String contactFor) {
+        this.contactFor = contactFor;
     }
 
     public boolean isQualifiedResponder() {

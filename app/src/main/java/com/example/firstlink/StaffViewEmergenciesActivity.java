@@ -62,15 +62,14 @@ public class StaffViewEmergenciesActivity extends BaseActivity {
                 new EmergencyAdapter.OnEmergencyClickListener() {
                     @Override
                     public void onEmergencyClick(EmergencyRequest emergency) {
-                        // Fallback path to the responder alert screen when
-                        // the notification was missed or permission denied.
-                        if (EmergencyRequest.STATUS_ACTIVE.equals(emergency.getStatus())) {
-                            Intent intent = new Intent(StaffViewEmergenciesActivity.this,
-                                    EmergencyResponderAlertActivity.class);
-                            intent.putExtra(EmergencyResponderAlertActivity.EXTRA_EMERGENCY_ID,
-                                    emergency.getId());
-                            startActivity(intent);
-                        }
+                        // Fallback path to the responder alert screen when the notification
+                        // was missed. Open for accepted ones too — more than one responder
+                        // may join an emergency someone has already taken.
+                        Intent intent = new Intent(StaffViewEmergenciesActivity.this,
+                                EmergencyResponderAlertActivity.class);
+                        intent.putExtra(EmergencyResponderAlertActivity.EXTRA_EMERGENCY_ID,
+                                emergency.getId());
+                        startActivity(intent);
                     }
 
                     @Override

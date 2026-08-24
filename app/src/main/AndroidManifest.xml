@@ -2,8 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -16,6 +20,9 @@
         android:theme="@style/Theme.FirstLink"
         tools:targetApi="31">
         <activity
+            android:name=".VenuePickerActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
@@ -27,6 +34,7 @@
         <activity android:name=".CreatorActivity" />
         <activity android:name=".AddPlacesAdminActivity" />
         <activity android:name=".AfterAddPlacesClickedActivity" />
+        <activity android:name=".ImportantPeopleActivity" />
         <activity android:name=".RoomCreationActivity" />
         <activity android:name=".AttendeeJoinEventActivity" />
         <activity android:name=".QualificationsActivity" />

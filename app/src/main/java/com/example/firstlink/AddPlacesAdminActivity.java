@@ -43,7 +43,7 @@ public class AddPlacesAdminActivity extends BaseActivity {
                     return;
                 }
                 startActivity(new Intent(AddPlacesAdminActivity.this,
-                        RoomCreationActivity.class));
+                        ImportantPeopleActivity.class));
             }
         });
     }

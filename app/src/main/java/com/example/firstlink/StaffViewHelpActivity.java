@@ -52,12 +52,20 @@ public class StaffViewHelpActivity extends BaseActivity {
         List<HelpRequest> requests = FirstLinkRepository.get(this).getOpenHelpRequests();
         emptyStateText.setVisibility(requests.isEmpty() ? View.VISIBLE : View.GONE);
         recyclerView.setVisibility(requests.isEmpty() ? View.GONE : View.VISIBLE);
-        recyclerView.setAdapter(new HelpRequestAdapter(requests,
-                new HelpRequestAdapter.OnResolveClickListener() {
+        final FirstLinkRepository repo = FirstLinkRepository.get(this);
+        recyclerView.setAdapter(new HelpRequestAdapter(requests, repo,
+                new HelpRequestAdapter.OnHelpClickListener() {
+                    @Override
+                    public void onAcceptClick(HelpRequest request) {
+                        repo.acceptHelpRequest(request.getId());
+                        Toast.makeText(StaffViewHelpActivity.this,
+                                "You are working on this request", Toast.LENGTH_SHORT).show();
+                        refresh();
+                    }
+
                     @Override
                     public void onResolveClick(HelpRequest request) {
-                        FirstLinkRepository.get(StaffViewHelpActivity.this)
-                                .resolveHelpRequest(request.getId());
+                        repo.resolveHelpRequest(request.getId());
                         Toast.makeText(StaffViewHelpActivity.this,
                                 "Help request resolved", Toast.LENGTH_SHORT).show();
                         refresh();

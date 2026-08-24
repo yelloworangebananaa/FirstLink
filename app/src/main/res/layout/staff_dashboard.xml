@@ -76,6 +76,26 @@
             android:orientation="vertical"
             android:paddingBottom="40dp">
 
+            <!-- "Sam is working on your request" — filled in by the activity. -->
+            <TextView
+                android:id="@+id/my_report_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/bg_ios_pill_green"
+                android:drawableStart="@drawable/ic_sf_person_fill_checkmark"
+                android:drawablePadding="10dp"
+                android:drawableTint="@color/success"
+                android:gravity="center_vertical"
+                android:padding="14dp"
+                android:text="Someone is working on your request"
+                android:textColor="@color/success"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
             <!-- Recovery path: the approved call follows staff home. -->
             <com.example.firstlink.widget.DraggableMaterialButton
                 android:id="@+id/call_911_approved_button"

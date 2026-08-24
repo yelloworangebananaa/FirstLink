@@ -84,6 +84,13 @@
                     android:layout_marginStart="6dp"
                     android:layout_weight="1"
                     android:background="@drawable/bg_ios_progress_off" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="5dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_ios_progress_off" />
             </LinearLayout>
 
             <TextView
@@ -92,7 +99,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="20dp"
-                android:text="Step 1 of 3"
+                android:text="Step 1 of 4"
                 android:textColor="@color/text_secondary"
                 android:textSize="13sp"
                 android:textStyle="bold" />
@@ -164,12 +171,15 @@
                     android:layout_marginStart="16dp"
                     android:background="@drawable/bg_ios_separator" />
 
-                <!-- LabeledContent("Venue") — typed on Android, map glyph kept as the affordance. -->
                 <LinearLayout
+                    android:id="@+id/venue_picker_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
                     android:gravity="center_vertical"
-                    android:minHeight="44dp"
+                    android:minHeight="64dp"
                     android:orientation="horizontal"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
@@ -183,31 +193,23 @@
                         android:textColor="@color/text_primary"
                         android:textSize="17sp" />
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <TextView
                         android:id="@+id/venue_name_submission"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:layout_weight="1"
-                        android:background="@null"
                         android:gravity="end|center_vertical"
                         android:hint="Choose venue"
-                        android:imeOptions="actionNext"
-                        android:inputType="textCapWords"
-                        android:minHeight="0dp"
-                        android:paddingStart="0dp"
-                        android:paddingEnd="0dp"
-                        android:paddingTop="0dp"
-                        android:paddingBottom="0dp"
                         android:textColor="@color/text_primary"
                         android:textColorHint="@color/text_secondary"
                         android:textSize="17sp" />
 
                     <ImageView
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:layout_marginStart="6dp"
-                        android:contentDescription="Venue on map"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginStart="8dp"
+                        android:contentDescription="Choose venue on map"
                         android:src="@drawable/ic_sf_map_fill"
                         android:tint="@color/brand_primary" />
                 </LinearLayout>

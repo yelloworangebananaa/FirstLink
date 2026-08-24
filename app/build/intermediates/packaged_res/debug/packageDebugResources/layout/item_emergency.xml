@@ -82,6 +82,17 @@
         android:textColor="@color/text_body"
         android:textSize="15sp" />
 
+
+    <ImageView
+        android:id="@+id/item_emergency_photo"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_marginTop="12dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="Photo from the reporter"
+        android:scaleType="centerCrop"
+        android:visibility="gone" />
+
     <TextView
         android:id="@+id/item_emergency_approval_status"
         android:layout_width="match_parent"

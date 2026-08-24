@@ -388,7 +388,8 @@ service cloud.firestore {
       // Responders may only claim; they can't rewrite the report.
       allow update: if signedIn() && myUser().eventId == resource.data.eventId
                     && request.resource.data.diff(resource.data).affectedKeys()
-                         .hasOnly(['status', 'assignedResponderId']);
+                         .hasOnly(['status', 'acceptedBy', 'acceptedUids',
+                                   'callApprovalStatus']);
     }
 
     match /helpRequests/{id} {
@@ -396,7 +397,15 @@ service cloud.firestore {
       allow create: if signedIn() && myUser().eventId == request.resource.data.eventId;
       allow update: if signedIn() && myUser().eventId == resource.data.eventId
                     && request.resource.data.diff(resource.data).affectedKeys()
-                         .hasOnly(['status']);
+                         .hasOnly(['status', 'acceptedBy', 'acceptedUids']);
+    }
+
+    match /contacts/{id} {
+      // Readable by any signed-in user, because joining with a contact code has to
+      // find one before the joiner has a user document — same trade-off as /events.
+      allow read: if signedIn();
+      allow create: if signedIn();
+      allow update, delete: if false;
     }
   }
 }

@@ -1,7 +1,9 @@
 package com.example.firstlink;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -9,6 +11,7 @@ import android.widget.Toast;
 import com.example.firstlink.data.FirstLinkRepository;
 import com.example.firstlink.model.EmergencyRequest;
 import com.example.firstlink.model.User;
+import com.example.firstlink.util.Photo;
 import com.google.android.material.button.MaterialButton;
 
 import java.text.DateFormat;
@@ -62,12 +65,15 @@ public class EmergencyResponderAlertActivity extends BaseActivity {
         statusText.setText(emergency.getConsciousness() + " • " + emergency.getBreathing());
         timeText.setText("Reported at " + DateFormat.getTimeInstance(DateFormat.SHORT)
                 .format(new Date(emergency.getTimestamp())));
+        Photo.show((ImageView) findViewById(R.id.alert_photo), emergency.getPhoto());
 
         respondersList = findViewById(R.id.alert_responders_list);
         acceptedByText = findViewById(R.id.alert_accepted_by);
         showWhoIsInvolved();
 
-        if (!EmergencyRequest.STATUS_ACTIVE.equals(emergency.getStatus())) {
+        // Someone else accepting does not close this screen — several responders may
+        // take the same emergency. Only MY own acceptance hides the accept button.
+        if (repo.acceptedByMe(emergency.getAcceptedUids())) {
             showAcceptedState();
         }
 
@@ -109,10 +115,10 @@ public class EmergencyResponderAlertActivity extends BaseActivity {
             respondersList.setText(sb.toString());
         }
 
-        String accepted = emergency.getAssignedResponderName();
-        acceptedByText.setText(accepted == null || accepted.trim().isEmpty()
+        List<String> accepted = emergency.getAcceptedBy();
+        acceptedByText.setText(accepted.isEmpty()
                 ? "Accepted by: nobody yet"
-                : "Accepted by: " + accepted);
+                : "Accepted by: " + TextUtils.join(", ", accepted));
     }
 
     private void showAcceptedState() {

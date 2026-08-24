@@ -78,6 +78,7 @@
     <string name="google_api_key" translatable="false">AIzaSyBU_RWB9dr5mYRuv7hmEtP2AEGPsmcgwA8</string>
     <string name="google_app_id" translatable="false">1:868678133174:android:81479eddf9eb9b6f2fcd17</string>
     <string name="google_crash_reporting_api_key" translatable="false">AIzaSyBU_RWB9dr5mYRuv7hmEtP2AEGPsmcgwA8</string>
+    <string name="google_maps_key" translatable="false">YOUR_GOOGLE_MAPS_API_KEY</string>
     <string name="google_storage_bucket" translatable="false">firstlink-93faf.firebasestorage.app</string>
     <string name="project_id" translatable="false">firstlink-93faf</string>
     <style name="Base.Theme.FirstLink" parent="Theme.Material3.DayNight.NoActionBar">
@@ -189,6 +190,13 @@
     </style>
     <style name="ThemeOverlay.FirstLink.Dialog.Danger">
         <item name="buttonBarPositiveButtonStyle">@style/Widget.FirstLink.Button.Dialog.Positive.Danger</item>
+    </style>
+    <style name="ThemeOverlay.FirstLink.VenueDialog" parent="Theme.Material3.DayNight.Dialog">
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.28</item>
+        <item name="android:windowNoTitle">true</item>
     </style>
     <style name="Widget.FirstLink.BackButton" parent="">
         <item name="android:background">@drawable/bg_circle_brand_soft</item>

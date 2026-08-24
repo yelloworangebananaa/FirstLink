@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.firstlink.app-mergeDebugResources-49:/values-h550dp-port-v13/values-h550dp-port-v13.xml",
+            "outputFile": "com.example.firstlink.app-mergeDebugResources-50:/values-h550dp-port-v13/values-h550dp-port-v13.xml",
             "map": [
                 {
-                    "source": "/Users/gio/.gradle/caches/8.11.1/transforms/9b76bd9faa829cae7ba763a93a077484/transformed/material-1.14.0/res/values-h550dp-port-v13/values-h550dp-port-v13.xml",
+                    "source": "/Users/gio/.gradle/caches/8.11.1/transforms/52e263c0525c579f26e3b78952cb3866/transformed/material-1.14.0/res/values-h550dp-port-v13/values-h550dp-port-v13.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

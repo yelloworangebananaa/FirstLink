@@ -6,10 +6,12 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.example.firstlink.model.Contact;
 import com.example.firstlink.model.EmergencyRequest;
 import com.example.firstlink.model.Event;
 import com.example.firstlink.model.HelpRequest;
 import com.example.firstlink.model.User;
+import com.example.firstlink.util.CodeGenerator;
 import com.example.firstlink.util.NotificationHelper;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
@@ -25,7 +27,9 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Shared data layer backed by Cloud Firestore.
@@ -46,11 +50,13 @@ public class FirstLinkRepository {
     private static final String KEY_ROLE = "role";
     private static final String KEY_NAME = "name";
     private static final String KEY_QUALIFIED = "qualified_responder";
+    private static final String KEY_CONTACT_FOR = "contact_for";
 
     private static final String COL_EVENTS = "events";
     private static final String COL_EMERGENCIES = "emergencies";
     private static final String COL_HELP = "helpRequests";
     private static final String COL_USERS = "users";
+    private static final String COL_CONTACTS = "contacts";
 
     private static FirstLinkRepository instance;
 
@@ -62,11 +68,13 @@ public class FirstLinkRepository {
     private final List<EmergencyRequest> emergencies = new ArrayList<>();
     private final List<HelpRequest> helpRequests = new ArrayList<>();
     private final List<User> participants = new ArrayList<>();
+    private final List<Contact> contacts = new ArrayList<>();
 
     private ListenerRegistration eventListener;
     private ListenerRegistration emergencyListener;
     private ListenerRegistration helpListener;
     private ListenerRegistration participantListener;
+    private ListenerRegistration contactListener;
 
     private Runnable onChange;
 
@@ -82,6 +90,12 @@ public class FirstLinkRepository {
      */
     private boolean emergencySnapshotPrimed;
     private boolean helpSnapshotPrimed;
+
+    /**
+     * How many people had accepted each report last time we looked, so a snapshot
+     * that changed something else (a resolve, an approval) doesn't re-notify.
+     */
+    private final Map<String, Integer> acceptCounts = new LinkedHashMap<>();
 
     /** Result of looking a join code up on the server. */
     public interface JoinCallback {
@@ -105,6 +119,7 @@ public class FirstLinkRepository {
             // Must be restored, or a qualified responder silently stops being
             // eligible for emergency alerts the first time the app restarts.
             currentUser.setQualifiedResponder(prefs.getBoolean(KEY_QUALIFIED, false));
+            currentUser.setContactFor(prefs.getString(KEY_CONTACT_FOR, null));
             attachListeners(eventId);
         }
     }
@@ -170,12 +185,21 @@ public class FirstLinkRepository {
 
                     if (emergencySnapshotPrimed) {
                         for (DocumentChange change : snapshots.getDocumentChanges()) {
+                            EmergencyRequest e =
+                                    change.getDocument().toObject(EmergencyRequest.class);
+                            e.setId(change.getDocument().getId());
                             if (change.getType() == DocumentChange.Type.ADDED) {
-                                EmergencyRequest e =
-                                        change.getDocument().toObject(EmergencyRequest.class);
-                                e.setId(change.getDocument().getId());
                                 maybeAlertForEmergency(e);
+                            } else if (change.getType() == DocumentChange.Type.MODIFIED) {
+                                maybeAlertReporterOfAcceptance(e.getReporterUid(),
+                                        acceptCounts.get(e.getId()), e.getAcceptedBy(),
+                                        "emergency");
                             }
+                            acceptCounts.put(e.getId(), e.getAcceptedBy().size());
+                        }
+                    } else {
+                        for (EmergencyRequest e : emergencies) {
+                            acceptCounts.put(e.getId(), e.getAcceptedBy().size());
                         }
                     }
                     emergencySnapshotPrimed = true;
@@ -199,13 +223,39 @@ public class FirstLinkRepository {
 
                     if (helpSnapshotPrimed) {
                         for (DocumentChange change : snapshots.getDocumentChanges()) {
+                            HelpRequest h = change.getDocument().toObject(HelpRequest.class);
+                            h.setId(change.getDocument().getId());
                             if (change.getType() == DocumentChange.Type.ADDED) {
-                                HelpRequest h = change.getDocument().toObject(HelpRequest.class);
                                 maybeAlertForHelp(h);
+                            } else if (change.getType() == DocumentChange.Type.MODIFIED) {
+                                maybeAlertReporterOfAcceptance(h.getRequesterUid(),
+                                        acceptCounts.get(h.getId()), h.getAcceptedBy(),
+                                        "request");
                             }
+                            acceptCounts.put(h.getId(), h.getAcceptedBy().size());
+                        }
+                    } else {
+                        for (HelpRequest h : helpRequests) {
+                            acceptCounts.put(h.getId(), h.getAcceptedBy().size());
                         }
                     }
                     helpSnapshotPrimed = true;
+                    notifyChanged();
+                });
+
+        contactListener = db.collection(COL_CONTACTS)
+                .whereEqualTo("eventId", eventId)
+                .addSnapshotListener((snapshots, error) -> {
+                    if (error != null || snapshots == null) {
+                        if (error != null) Log.e(TAG, "contact listener: " + error.getMessage());
+                        return;
+                    }
+                    contacts.clear();
+                    for (QueryDocumentSnapshot doc : snapshots) {
+                        Contact c = doc.toObject(Contact.class);
+                        c.setId(doc.getId());
+                        contacts.add(c);
+                    }
                     notifyChanged();
                 });
 
@@ -244,8 +294,50 @@ public class FirstLinkRepository {
     }
 
     private void maybeAlertForHelp(HelpRequest h) {
-        if (currentUser == null || !currentUser.isStaffLevel()) return;
-        NotificationHelper.showHelpNotification(appContext, h.getDescription());
+        if (isOwnReport(h.getRequesterUid()) || currentUser == null) return;
+        String problem = h.getProblem();
+        // The standing contact for this problem is alerted alongside the staff, and told
+        // it is theirs. They joined with their own code, so nothing else identifies them.
+        boolean mine = problem != null && !problem.isEmpty()
+                && problem.equals(currentUser.getContactFor());
+        if (!mine && !currentUser.isStaffLevel()) return;
+        String text = problem == null || problem.isEmpty()
+                ? h.getDescription() : problem + " — " + h.getDescription();
+        NotificationHelper.showHelpNotification(appContext,
+                mine ? "You are the contact for this" : "New help request", text);
+    }
+
+    /**
+     * The other half of the loop: whoever reported this hears back, on their own
+     * device, the moment a staff member accepts it.
+     */
+    private void maybeAlertReporterOfAcceptance(String reporterUid, Integer knownAccepts,
+                                                List<String> acceptedBy, String noun) {
+        if (!isOwnReport(reporterUid)) return;
+        if (!someoneNewAccepted(knownAccepts, acceptedBy.size())) return;
+        NotificationHelper.showAcceptedNotification(
+                appContext, acceptedBy.get(acceptedBy.size() - 1), noun);
+    }
+
+    /** This device's Firebase Auth uid, or "" before sign-in completes. */
+    public String myUid() {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        return auth.getCurrentUser() == null ? "" : auth.getCurrentUser().getUid();
+    }
+
+    /** True when this device is one of the people who accepted a report. */
+    public boolean acceptedByMe(List<String> acceptedUids) {
+        String uid = myUid();
+        return !uid.isEmpty() && acceptedUids.contains(uid);
+    }
+
+    /**
+     * A snapshot fires for any change to the document — a resolve, a 911 approval. Only a
+     * longer accept list means someone new picked the report up. Null = never seen before,
+     * which for a document that already has accepts is still news to this device.
+     */
+    static boolean someoneNewAccepted(Integer knownAccepts, int nowAccepted) {
+        return nowAccepted > (knownAccepts == null ? 0 : knownAccepts);
     }
 
     private boolean isOwnReport(String reporterUid) {
@@ -259,10 +351,12 @@ public class FirstLinkRepository {
         if (emergencyListener != null) emergencyListener.remove();
         if (helpListener != null) helpListener.remove();
         if (participantListener != null) participantListener.remove();
+        if (contactListener != null) contactListener.remove();
         eventListener = null;
         emergencyListener = null;
         helpListener = null;
         participantListener = null;
+        contactListener = null;
     }
 
     /** Newest first. Firestore can't order without an index unless we ask for one. */
@@ -360,7 +454,8 @@ public class FirstLinkRepository {
                         .get()
                         .addOnSuccessListener(staffSnap -> {
                             if (!staffSnap.isEmpty()) {
-                                finishJoin(staffSnap.getDocuments().get(0), User.ROLE_STAFF, callback);
+                                finishJoin(staffSnap.getDocuments().get(0), User.ROLE_STAFF,
+                                        null, callback);
                                 return;
                             }
                             db.collection(COL_EVENTS)
@@ -369,12 +464,12 @@ public class FirstLinkRepository {
                                     .limit(1)
                                     .get()
                                     .addOnSuccessListener(attendeeSnap -> {
-                                        if (attendeeSnap.isEmpty()) {
-                                            callback.onInvalidCode();
-                                        } else {
+                                        if (!attendeeSnap.isEmpty()) {
                                             finishJoin(attendeeSnap.getDocuments().get(0),
-                                                    User.ROLE_ATTENDEE, callback);
+                                                    User.ROLE_ATTENDEE, null, callback);
+                                            return;
                                         }
+                                        joinAsContact(normalized, callback);
                                     })
                                     .addOnFailureListener(e -> callback.onError(e.getMessage()));
                         })
@@ -382,12 +477,50 @@ public class FirstLinkRepository {
                 .addOnFailureListener(e -> callback.onError(e.getMessage()));
     }
 
-    private void finishJoin(DocumentSnapshot doc, String role, JoinCallback callback) {
+    /**
+     * A code the organizer handed to one named person on the Important People screen.
+     * They join as staff so they can see and accept requests, tagged with their problem
+     * so their phone can single that problem's requests out.
+     */
+    private void joinAsContact(String code, final JoinCallback callback) {
+        db.collection(COL_CONTACTS)
+                .whereEqualTo("code", code)
+                .limit(1)
+                .get()
+                .addOnSuccessListener(contactSnap -> {
+                    if (contactSnap.isEmpty()) {
+                        callback.onInvalidCode();
+                        return;
+                    }
+                    Contact contact = contactSnap.getDocuments().get(0).toObject(Contact.class);
+                    if (contact == null) {
+                        callback.onInvalidCode();
+                        return;
+                    }
+                    db.collection(COL_EVENTS).document(contact.getEventId()).get()
+                            .addOnSuccessListener(eventDoc -> {
+                                Event e = eventDoc.exists() ? toEvent(eventDoc) : null;
+                                if (e == null || !e.isActive()) {
+                                    callback.onInvalidCode();
+                                    return;
+                                }
+                                finishJoin(eventDoc, User.ROLE_STAFF, contact.getProblem(),
+                                        callback);
+                            })
+                            .addOnFailureListener(e -> callback.onError(e.getMessage()));
+                })
+                .addOnFailureListener(e -> callback.onError(e.getMessage()));
+    }
+
+    private void finishJoin(DocumentSnapshot doc, String role, @Nullable String contactFor,
+                            JoinCallback callback) {
         event = toEvent(doc);
         currentUser = new User(doc.getId(), role);
+        currentUser.setContactFor(contactFor);
         prefs.edit()
                 .putString(KEY_EVENT_ID, doc.getId())
                 .putString(KEY_ROLE, role)
+                .putString(KEY_CONTACT_FOR, contactFor)
                 .apply();
         attachListeners(doc.getId());
         callback.onJoined(role);
@@ -415,8 +548,10 @@ public class FirstLinkRepository {
         emergencies.clear();
         helpRequests.clear();
         participants.clear();
+        contacts.clear();
+        acceptCounts.clear();
         prefs.edit().remove(KEY_EVENT_ID).remove(KEY_ROLE).remove(KEY_NAME)
-                .remove(KEY_QUALIFIED).apply();
+                .remove(KEY_QUALIFIED).remove(KEY_CONTACT_FOR).apply();
     }
 
     // ----------------------------------------------------------------- user
@@ -489,11 +624,11 @@ public class FirstLinkRepository {
     // ---------------------------------------------------------- emergencies
 
     public EmergencyRequest addEmergency(String location, String description,
-                                         String consciousness, String breathing) {
+                                         String consciousness, String breathing, String photo) {
         String eventId = event == null ? "" : event.getId();
         String role = currentUser == null ? User.ROLE_ATTENDEE : currentUser.getRole();
         final EmergencyRequest request = new EmergencyRequest(
-                eventId, role, location, description, consciousness, breathing);
+                eventId, role, location, description, consciousness, breathing, photo);
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
@@ -528,19 +663,19 @@ public class FirstLinkRepository {
         return null;
     }
 
+    /** Additive: a second responder accepting joins the first rather than replacing them. */
     public void acceptEmergency(String emergencyId) {
         EmergencyRequest e = getEmergencyById(emergencyId);
-        if (e == null) return;
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        final String responderId = auth.getCurrentUser() == null ? "" : auth.getCurrentUser().getUid();
+        if (e == null || acceptedByMe(e.getAcceptedUids())) return;
+        final String responderId = myUid();
         final String responderName = currentUserName();
         e.setStatus(EmergencyRequest.STATUS_RESPONDER_ASSIGNED);
-        e.setAssignedResponderId(responderId);
-        e.setAssignedResponderName(responderName);
+        e.getAcceptedBy().add(responderName);
+        e.getAcceptedUids().add(responderId);
         ensureSignedIn().addOnSuccessListener(v -> db.collection(COL_EMERGENCIES).document(emergencyId)
                 .update("status", EmergencyRequest.STATUS_RESPONDER_ASSIGNED,
-                        "assignedResponderId", responderId,
-                        "assignedResponderName", responderName)
+                        "acceptedBy", FieldValue.arrayUnion(responderName),
+                        "acceptedUids", FieldValue.arrayUnion(responderId))
                 .addOnFailureListener(err -> Log.e(TAG, "acceptEmergency: " + err.getMessage())));
     }
 
@@ -611,9 +746,12 @@ public class FirstLinkRepository {
 
     // -------------------------------------------------------- help requests
 
-    public HelpRequest addHelpRequest(String location, String description) {
+    public HelpRequest addHelpRequest(String location, String description,
+                                      String problem, String photo) {
         String eventId = event == null ? "" : event.getId();
-        final HelpRequest request = new HelpRequest(eventId, location, description);
+        final HelpRequest request =
+                new HelpRequest(eventId, location, description, problem, photo);
+        request.setRequesterUid(myUid());
 
         final DocumentReference ref = db.collection(COL_HELP).document();
         request.setId(ref.getId());
@@ -633,6 +771,84 @@ public class FirstLinkRepository {
             }
         }
         return open;
+    }
+
+    /** Additive, same as emergencies: several staff may work the same request. */
+    public void acceptHelpRequest(String helpRequestId) {
+        HelpRequest target = null;
+        for (HelpRequest h : helpRequests) {
+            if (h.getId().equals(helpRequestId)) {
+                target = h;
+                break;
+            }
+        }
+        if (target == null || acceptedByMe(target.getAcceptedUids())) return;
+        final String staffId = myUid();
+        final String staffName = currentUserName();
+        target.setStatus(HelpRequest.STATUS_IN_PROGRESS);
+        target.getAcceptedBy().add(staffName);
+        target.getAcceptedUids().add(staffId);
+        ensureSignedIn().addOnSuccessListener(v -> db.collection(COL_HELP).document(helpRequestId)
+                .update("status", HelpRequest.STATUS_IN_PROGRESS,
+                        "acceptedBy", FieldValue.arrayUnion(staffName),
+                        "acceptedUids", FieldValue.arrayUnion(staffId))
+                .addOnFailureListener(err -> Log.e(TAG, "acceptHelpRequest: " + err.getMessage())));
+    }
+
+    // ------------------------------------------------------- important people
+
+    /** The organizer's problem -> person list, one join code each. */
+    public List<Contact> getContacts() {
+        return new ArrayList<>(contacts);
+    }
+
+    /** "Water problem" -> "Dana Reyes". Null when nobody is named for that problem. */
+    @Nullable
+    public String contactPersonFor(String problem) {
+        if (problem == null || problem.isEmpty()) return null;
+        for (Contact c : contacts) {
+            if (problem.equals(c.getProblem())) return c.getPerson();
+        }
+        return null;
+    }
+
+    /** Returns the new contact so the organizer can read its code straight back. */
+    public Contact saveContact(String problem, String person) {
+        String eventId = event == null ? "" : event.getId();
+        final Contact contact = new Contact(eventId, problem, person, CodeGenerator.generate());
+        final DocumentReference ref = db.collection(COL_CONTACTS).document();
+        contact.setId(ref.getId());
+        contacts.add(contact);
+        ensureSignedIn().addOnSuccessListener(v -> ref.set(contact)
+                .addOnFailureListener(e -> Log.e(TAG, "saveContact: " + e.getMessage())));
+        return contact;
+    }
+
+    /**
+     * What the dashboards show the person who reported something: who picked it up.
+     * Null when nothing of theirs is open, or nobody has accepted yet.
+     */
+    @Nullable
+    public String getMyReportAcceptedSummary() {
+        String uid = myUid();
+        if (uid.isEmpty()) return null;
+        for (EmergencyRequest e : emergencies) {
+            if (uid.equals(e.getReporterUid())
+                    && !EmergencyRequest.STATUS_RESOLVED.equals(e.getStatus())
+                    && !e.getAcceptedBy().isEmpty()) {
+                return android.text.TextUtils.join(", ", e.getAcceptedBy())
+                        + " is responding to your emergency";
+            }
+        }
+        for (HelpRequest h : helpRequests) {
+            if (uid.equals(h.getRequesterUid())
+                    && !HelpRequest.STATUS_RESOLVED.equals(h.getStatus())
+                    && !h.getAcceptedBy().isEmpty()) {
+                return android.text.TextUtils.join(", ", h.getAcceptedBy())
+                        + " is working on your request";
+            }
+        }
+        return null;
     }
 
     public void resolveHelpRequest(String helpRequestId) {

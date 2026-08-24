@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.firstlink.app-mergeDebugResources-49:/values-v25/values-v25.xml",
+            "outputFile": "com.example.firstlink.app-mergeDebugResources-50:/values-v25/values-v25.xml",
             "map": [
                 {
-                    "source": "/Users/gio/.gradle/caches/8.11.1/transforms/72c29f6bfc429a9aa09529494c563b4b/transformed/appcompat-1.7.1/res/values-v25/values-v25.xml",
+                    "source": "/Users/gio/.gradle/caches/8.11.1/transforms/cf45a7e39c17fae6f161b8b76f88cb2b/transformed/appcompat-1.7.1/res/values-v25/values-v25.xml",
                     "from": {
                         "startLines": "2,3,4,6",
                         "startColumns": "4,4,4,4",

@@ -13,6 +13,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.firstlink.EmergencyResponderAlertActivity;
+import com.example.firstlink.StaffViewHelpActivity;
 
 /**
  * Local notifications for the single-device demo.
@@ -74,15 +75,40 @@ public class NotificationHelper {
         manager.notify(nextId++, builder.build());
     }
 
-    /** Notification for staff about a new non-emergency help request. */
-    public static void showHelpNotification(Context context, String description) {
+    /** Notification for staff about a new help request; tap opens the list to accept it. */
+    public static void showHelpNotification(Context context, String title, String description) {
+        if (!canNotify(context)) return;
+        ensureChannel(context);
+
+        Intent intent = new Intent(context, StaffViewHelpActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                context, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                .setSmallIcon(android.R.drawable.ic_dialog_info)
+                .setContentTitle(title)
+                .setContentText(description)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setDefaults(NotificationCompat.DEFAULT_ALL)
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent);
+
+        NotificationManager manager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.notify(nextId++, builder.build());
+    }
+
+    /** Sent back to the reporter: someone has picked their report up. */
+    public static void showAcceptedNotification(Context context, String who, String noun) {
         if (!canNotify(context)) return;
         ensureChannel(context);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(android.R.drawable.ic_dialog_info)
-                .setContentTitle("New help request")
-                .setContentText(description)
+                .setContentTitle("Help is on the way")
+                .setContentText(who + " is working on your " + noun)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setAutoCancel(true);

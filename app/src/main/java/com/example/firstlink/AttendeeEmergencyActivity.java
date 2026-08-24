@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -17,10 +18,11 @@ import com.example.firstlink.model.Event;
 import com.example.firstlink.model.User;
 import com.example.firstlink.util.Dialer;
 import com.example.firstlink.util.GlassBlur;
-import com.example.firstlink.util.NotificationHelper;
+import com.example.firstlink.util.Photo;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
 import java.util.List;
@@ -32,6 +34,8 @@ public class AttendeeEmergencyActivity extends BaseActivity {
     private EditText descriptionInput;
     private RadioGroup consciousnessGroup;
     private RadioGroup breathingGroup;
+    private ImageView photoPreview;
+    private String photo;
     private FirstLinkRepository repo;
     private String awaitingApprovalId;
     private AlertDialog waitingDialog;
@@ -47,7 +51,16 @@ public class AttendeeEmergencyActivity extends BaseActivity {
         descriptionInput = findViewById(R.id.attendee_emergency_description);
         consciousnessGroup = findViewById(R.id.attendee_emergency_consciousness_group);
         breathingGroup = findViewById(R.id.attendee_emergency_breathing_group);
+        photoPreview = findViewById(R.id.attendee_emergency_photo_preview);
         MaterialButton sendButton = findViewById(R.id.attendee_emergency_send_button);
+        MaterialButton photoButton = findViewById(R.id.attendee_emergency_photo_button);
+
+        photoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Photo.capture(AttendeeEmergencyActivity.this);
+            }
+        });
 
         // Locations entered by the organizer during event creation.
         List<String> locations = repo.getLocations();
@@ -85,12 +98,20 @@ public class AttendeeEmergencyActivity extends BaseActivity {
         String description = descriptionInput.getText().toString().trim();
 
         EmergencyRequest request =
-                repo.addEmergency(location, description, consciousness, breathing);
+                repo.addEmergency(location, description, consciousness, breathing, photo);
 
         // No notification for the reporter — they are standing right here. Every other
         // device raises its own alert from the Firestore listener in the repository.
 
         showConfirmation(request);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode != Photo.REQUEST_CODE || resultCode != RESULT_OK) return;
+        photo = Photo.encode(data);
+        Photo.show(photoPreview, photo);
     }
 
     private String selectedConsciousness() {

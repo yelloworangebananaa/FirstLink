@@ -5,14 +5,20 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 
 import com.example.firstlink.data.FirstLinkRepository;
+import com.example.firstlink.model.Contact;
 import com.example.firstlink.model.User;
-import com.example.firstlink.util.NotificationHelper;
+import com.example.firstlink.util.Photo;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 
 import java.util.List;
 
@@ -21,6 +27,9 @@ public class AttendeeHelpActivity extends BaseActivity {
 
     private Spinner locationSpinner;
     private EditText descriptionInput;
+    private ChipGroup problemChips;
+    private ImageView photoPreview;
+    private String photo;
     private FirstLinkRepository repo;
 
     @Override
@@ -32,7 +41,19 @@ public class AttendeeHelpActivity extends BaseActivity {
 
         locationSpinner = findViewById(R.id.attendee_help_location_spinner);
         descriptionInput = findViewById(R.id.attendee_help_description);
+        problemChips = findViewById(R.id.attendee_help_problem_chips);
+        photoPreview = findViewById(R.id.attendee_help_photo_preview);
         MaterialButton sendButton = findViewById(R.id.attendee_help_send_button);
+        MaterialButton photoButton = findViewById(R.id.attendee_help_photo_button);
+
+        showProblemChips();
+
+        photoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Photo.capture(AttendeeHelpActivity.this);
+            }
+        });
 
         List<String> locations = repo.getLocations();
         locations.add(0, "Select location (optional)");
@@ -49,16 +70,54 @@ public class AttendeeHelpActivity extends BaseActivity {
         });
     }
 
+    /**
+     * One chip per problem the organizer set up. Anyone may tag their request with one;
+     * only the staff member who accepts it is shown the contact behind it.
+     */
+    private void showProblemChips() {
+        List<Contact> contacts = repo.getContacts();
+        TextView label = findViewById(R.id.attendee_help_problem_label);
+        if (contacts.isEmpty()) {
+            label.setVisibility(View.GONE);
+            problemChips.setVisibility(View.GONE);
+            return;
+        }
+        for (Contact contact : contacts) {
+            Chip chip = new Chip(this);
+            chip.setText(contact.getProblem());
+            chip.setCheckable(true);
+            problemChips.addView(chip);
+        }
+    }
+
+    private String selectedProblem() {
+        int checkedId = problemChips.getCheckedChipId();
+        if (checkedId == View.NO_ID) return "";
+        Chip chip = problemChips.findViewById(checkedId);
+        return chip == null ? "" : chip.getText().toString();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode != Photo.REQUEST_CODE || resultCode != RESULT_OK) return;
+        photo = Photo.encode(data);
+        Photo.show(photoPreview, photo);
+    }
+
     private void sendHelpRequest() {
         String description = descriptionInput.getText().toString().trim();
-        if (description.isEmpty()) {
+        String problem = selectedProblem();
+        // A tapped preset says enough on its own, so it stands in for the description.
+        if (description.isEmpty() && problem.isEmpty()) {
             descriptionInput.setError("Describe what you need help with");
             return;
         }
         String location = locationSpinner.getSelectedItemPosition() <= 0
                 ? "" : locationSpinner.getSelectedItem().toString();
 
-        repo.addHelpRequest(location, description);
+        repo.addHelpRequest(location, description.isEmpty() ? problem : description,
+                problem, photo);
 
         // Staff devices raise their own notification from the Firestore listener.
         Toast.makeText(this, "Help request sent to staff", Toast.LENGTH_LONG).show();
