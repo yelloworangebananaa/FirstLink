@@ -303,6 +303,11 @@ public class FirstLinkRepository {
         if (!mine && !currentUser.isStaffLevel()) return;
         String text = problem == null || problem.isEmpty()
                 ? h.getDescription() : problem + " — " + h.getDescription();
+        // Staff see who handles this right on the notification, no need to open the app.
+        if (!mine) {
+            String contact = contactPersonFor(problem);
+            if (contact != null && !contact.isEmpty()) text += "\nContact: " + contact;
+        }
         NotificationHelper.showHelpNotification(appContext,
                 mine ? "You are the contact for this" : "New help request", text);
     }
@@ -812,15 +817,36 @@ public class FirstLinkRepository {
         return null;
     }
 
-    /** Returns the new contact so the organizer can read its code straight back. */
-    public Contact saveContact(String problem, String person) {
+    /** Tells the caller whether a contact actually reached the server. */
+    public interface SaveContactCallback {
+        void onSaved(Contact contact, boolean ok, @Nullable String error);
+    }
+
+    /**
+     * The contact is shown immediately from the local cache, but its code only works
+     * on other phones once the write lands — so failure is reported, never swallowed.
+     * A silent failure here looks exactly like "the join code doesn't work".
+     */
+    public Contact saveContact(String problem, String person, final SaveContactCallback cb) {
         String eventId = event == null ? "" : event.getId();
         final Contact contact = new Contact(eventId, problem, person, CodeGenerator.generate());
         final DocumentReference ref = db.collection(COL_CONTACTS).document();
         contact.setId(ref.getId());
         contacts.add(contact);
         ensureSignedIn().addOnSuccessListener(v -> ref.set(contact)
-                .addOnFailureListener(e -> Log.e(TAG, "saveContact: " + e.getMessage())));
+                .addOnSuccessListener(unused -> cb.onSaved(contact, true, null))
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "saveContact: " + e.getMessage());
+                    contacts.remove(contact);
+                    notifyChanged();
+                    cb.onSaved(contact, false, e.getMessage());
+                }))
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "saveContact: " + e.getMessage());
+                    contacts.remove(contact);
+                    notifyChanged();
+                    cb.onSaved(contact, false, e.getMessage());
+                });
         return contact;
     }
 

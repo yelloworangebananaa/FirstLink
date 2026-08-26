@@ -98,7 +98,7 @@
         android:textStyle="bold"
         android:visibility="gone" />
 
-    <!-- Only rendered for staff who accepted this request. -->
+    <!-- Shown to all staff as soon as the request arrives. -->
     <TextView
         android:id="@+id/item_help_contact"
         android:layout_width="match_parent"

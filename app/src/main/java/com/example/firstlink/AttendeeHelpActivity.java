@@ -71,8 +71,8 @@ public class AttendeeHelpActivity extends BaseActivity {
     }
 
     /**
-     * One chip per problem the organizer set up. Anyone may tag their request with one;
-     * only the staff member who accepts it is shown the contact behind it.
+     * One button per problem the organizer set up. Tapping one tags the request so
+     * staff immediately see who handles it, and that person is notified directly.
      */
     private void showProblemChips() {
         List<Contact> contacts = repo.getContacts();

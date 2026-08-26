@@ -69,12 +69,14 @@ public class HelpRequestAdapter extends RecyclerView.Adapter<HelpRequestAdapter.
         holder.accepted.setVisibility(acceptedBy.isEmpty() ? View.GONE : View.VISIBLE);
         holder.accepted.setText("Accepted by " + TextUtils.join(", ", acceptedBy));
 
-        // Only staff who actually accepted may see who to contact about this problem.
-        boolean mine = repo.acceptedByMe(request.getAcceptedUids());
+        // Every staff member sees who to contact the moment the request lands,
+        // whether or not anyone has accepted it yet.
         String contact = repo.contactPersonFor(problem);
-        boolean showContact = mine && contact != null && !contact.isEmpty();
+        boolean showContact = contact != null && !contact.isEmpty();
         holder.contact.setVisibility(showContact ? View.VISIBLE : View.GONE);
         holder.contact.setText("Contact: " + contact);
+
+        boolean mine = repo.acceptedByMe(request.getAcceptedUids());
 
         // Others may still join in — the button only disappears for people already on it.
         holder.acceptButton.setVisibility(mine ? View.GONE : View.VISIBLE);

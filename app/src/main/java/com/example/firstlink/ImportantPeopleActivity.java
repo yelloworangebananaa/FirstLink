@@ -15,8 +15,8 @@ import java.util.List;
 
 /**
  * Organizer setup, step 3: "who do I call for X". Each problem added here becomes a
- * preset button on the help screen; the contact behind it is revealed only to the
- * staff member who accepts the request.
+ * preset button on the help screen; the moment a request tagged with it lands, staff
+ * see who handles it — in the list and on the notification.
  *
  * Each person also gets their own join code. Joining with it makes them staff tagged
  * with their problem, so requests for it alert them by name as well as the staff.
@@ -68,11 +68,27 @@ public class ImportantPeopleActivity extends BaseActivity {
             personInput.setError("Name who handles it");
             return;
         }
-        Contact contact = FirstLinkRepository.get(this).saveContact(problem, person);
+        Contact contact = FirstLinkRepository.get(this)
+                .saveContact(problem, person, new FirstLinkRepository.SaveContactCallback() {
+                    @Override
+                    public void onSaved(Contact saved, boolean ok, String error) {
+                        if (ok) {
+                            Toast.makeText(ImportantPeopleActivity.this,
+                                    person + "'s code: " + saved.getCode(),
+                                    Toast.LENGTH_LONG).show();
+                        } else {
+                            // The entry is pulled back off the list: an unsaved code
+                            // would look real on this phone but join nowhere.
+                            Toast.makeText(ImportantPeopleActivity.this,
+                                    "Could not save — the code was not shared. "
+                                            + "Check your connection and try again.",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
         problemInput.setText("");
         personInput.setText("");
         problemInput.requestFocus();
-        Toast.makeText(this, person + "'s code: " + contact.getCode(), Toast.LENGTH_LONG).show();
         showContacts();
     }
 
