@@ -1,7 +1,9 @@
 package com.example.firstlink.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class Event {
@@ -14,8 +16,13 @@ public class Event {
     private String staffCode;
     private List<String> locations;
     private boolean active;
+    /** ReadyMap: places with an AED, places with a first-aid kit. Organizer-only planning data. */
+    private List<String> aedLocations;
+    private List<String> firstAidLocations;
+    /** ReadyMap: responder uid -> the place the organizer posted them. */
+    private Map<String, String> responderPosts;
 
-    /** Required by Firestore's object mapper. */
+    /** Empty shell the repository fills from a database row. */
     public Event() {
         this.locations = new ArrayList<>();
     }
@@ -103,5 +110,32 @@ public class Event {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public List<String> getAedLocations() {
+        if (aedLocations == null) aedLocations = new ArrayList<>();
+        return aedLocations;
+    }
+
+    public void setAedLocations(List<String> aedLocations) {
+        this.aedLocations = aedLocations;
+    }
+
+    public List<String> getFirstAidLocations() {
+        if (firstAidLocations == null) firstAidLocations = new ArrayList<>();
+        return firstAidLocations;
+    }
+
+    public void setFirstAidLocations(List<String> firstAidLocations) {
+        this.firstAidLocations = firstAidLocations;
+    }
+
+    public Map<String, String> getResponderPosts() {
+        if (responderPosts == null) responderPosts = new HashMap<>();
+        return responderPosts;
+    }
+
+    public void setResponderPosts(Map<String, String> responderPosts) {
+        this.responderPosts = responderPosts;
     }
 }

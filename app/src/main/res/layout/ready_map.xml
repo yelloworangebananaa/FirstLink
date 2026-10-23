@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ReadyMapView: one tile per place, chunked into a one-line summary first. -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_page_glass"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="40dp">
+
+        <!-- Nav bar, 44dp. -->
+        <ImageButton
+            android:id="@+id/back_button"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Back"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_back"
+            app:tint="@color/brand_primary" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="20dp"
+            android:text="ReadyMap"
+            android:textColor="@color/text_primary"
+            android:textSize="34sp"
+            android:textStyle="bold" />
+
+        <!-- Honest framing: it knows where people were posted, not where they are. -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="20dp"
+            android:lineSpacingMultiplier="1.25"
+            android:text="Planning estimate from what you've entered — not a guarantee of safety."
+            android:textColor="@color/text_secondary"
+            android:textSize="15sp" />
+
+        <!-- Chunking: the whole map in one line before any tile. -->
+        <TextView
+            android:id="@+id/ready_map_summary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="20dp"
+            android:text="0 covered · 0 partial · 0 gaps"
+            android:textColor="@color/text_primary"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/ready_map_unposted"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/bg_ios_code_orange"
+            android:drawableStart="@drawable/ic_sf_person_fill"
+            android:drawablePadding="10dp"
+            android:drawableTint="@color/warning"
+            android:gravity="center_vertical"
+            android:padding="14dp"
+            android:text="2 responders not posted yet"
+            android:textColor="@color/warning_dark_text"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <!-- Fitts: two big tiles per row. Rows are inflated by ReadyMapActivity. -->
+        <GridLayout
+            android:id="@+id/ready_map_grid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="14dp"
+            android:columnCount="2" />
+
+        <!-- ContentUnavailableView: no places entered. Java only toggles visibility. -->
+        <TextView
+            android:id="@+id/ready_map_empty_state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="80dp"
+            android:layout_marginEnd="40dp"
+            android:drawableTop="@drawable/ic_sf_mappin_slash"
+            android:drawablePadding="12dp"
+            android:drawableTint="@color/text_hint"
+            android:gravity="center"
+            android:lineSpacingMultiplier="1.3"
+            android:text="No places yet\n\nAdd rooms and zones when creating the event to map coverage."
+            android:textColor="@color/text_secondary"
+            android:textSize="15sp"
+            android:visibility="gone" />
+    </LinearLayout>
+</ScrollView>

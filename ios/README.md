@@ -1,28 +1,31 @@
 # FirstLink for iOS
 
-SwiftUI port of the Android app. Same Firestore schema and field names, so an
-event created on Android joins from iOS and vice versa.
+SwiftUI port of the Android app, backed by Supabase. Tables and columns are in
+`supabase/schema.sql` — the snake_case versions of the Android app's fields — so the
+two apps share events once both talk to the same Supabase project.
 
 ## Setup
 
-Open `ios/FirstLink.xcodeproj`, wait for the Firebase package to resolve, set your
-signing team, run. It works with no `GoogleService-Info.plist`: `configureFirebase()`
-in `FirstLinkApp.swift` falls back to a code-built `FirebaseOptions` using the project
-values Android already has. Auth and Firestore only need `apiKey` + `projectID`.
+Open `ios/FirstLink.xcodeproj`, wait for the `supabase-swift` package (2.x) to
+resolve, set your signing team, run. There is no config file: the project URL and
+anon key are in `Store.swift`. The anon key is public by design — the row level
+security policies in `schema.sql` are what keep one event's data from everyone else.
 
-That fallback is a stopgap. To finish the setup properly:
+The backend needs, once per project (already done for this one):
 
-1. Firebase console → project `firstlink-93faf` → add an **iOS app** with bundle id
-   `com.example.firstlink`.
-2. Download `GoogleService-Info.plist` and drop it into `ios/FirstLink/`. The target
-   uses a synchronized folder, so it is picked up with no Xcode wiring, and the
-   fallback branch stops running on its own.
+1. Authentication → Sign In / Providers → enable **Allow anonymous sign-ins**.
+2. SQL editor → run all of `supabase/schema.sql` (tables, realtime publication,
+   `redeem_code` / `accept_*` RPCs, RLS).
 
-Until then, Installations / Analytics / Crashlytics / FCM will not work against the
-unregistered app id — none of which this app uses.
+RLS means a phone sees an event's rows only once it organizes the event or has a
+`users` row in it. That is why `join(code:)` writes the users row before fetching,
+and `createEvent` writes the organizer's.
 
-Anonymous auth and Firestore must both be enabled in the console — same requirements
-as the Android app (see `FIREBASE_SETUP.md`), and already done for this project.
+Wire-format check, no Xcode needed — decodes `contract/rows.json` (rows exactly as
+PostgREST returns them) and runs the alert and ReadyMap rules:
+
+    swiftc ios/FirstLink/Models.swift ios/Checks/main.swift -o /tmp/modelscheck
+    /tmp/modelscheck contract/rows.json
 
 ## Layout
 
@@ -37,6 +40,7 @@ as the Android app (see `FIREBASE_SETUP.md`), and already done for this project.
 | `Dashboards.swift` | `StaffDashboardActivity`, `AttendeeMainDashboardActivity` |
 | `Reporting.swift` | `AttendeeEmergencyActivity`, `AttendeeHelpActivity` |
 | `StaffLists.swift` | `StaffView*Activity`, both adapters, `EmergencyResponderAlertActivity` |
+| `ReadyMapView.swift` | `ReadyMapActivity`, `item_ready_spot`, `dialog_ready_spot` |
 
 ## Design
 
@@ -51,7 +55,7 @@ Decisions and the [Laws of UX](https://lawsofux.com/) behind them:
 |---|---|
 | Jakob's Law | Native `Form`/`List` everywhere instead of hand-rolled cards |
 | Fitts's Law | Primary actions pinned bottom in `safeAreaBar`; emergency button is huge |
-| Von Restorff | Red is spent on exactly one thing per screen — the emergency path |
+| Von Restorff | Red is spent on exactly one thing per screen — the emergency path; ReadyMap gaps are orange, never red |
 | Hick's Law | Attendee dashboard offers two actions, nothing else |
 | Chunking / Miller | Staff dashboard's five actions became two labelled groups plus End Event |
 | Goal-Gradient | 3-step progress bar through event setup |
@@ -71,6 +75,6 @@ Decisions and the [Laws of UX](https://lawsofux.com/) behind them:
 - **Dead colour tokens** (`gradient_*`, `*_glow`, `on_gradient_*`) — the Android theme kept
   them only so old layouts kept resolving. Nothing here refers to them.
 
-Cross-device alerts still come from the open Firestore listener, not FCM, exactly like
+Cross-device alerts still come from the open realtime channel, not push, exactly like
 Android — so they arrive while the app is running or briefly backgrounded, not after
 it has been terminated.

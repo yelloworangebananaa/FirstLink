@@ -14,10 +14,10 @@ import android.widget.Toast;
 import java.io.ByteArrayOutputStream;
 
 /**
- * One photo per report, carried inside the Firestore document as base64 JPEG.
+ * One photo per report, carried inside the report row as base64 JPEG.
  *
  * ponytail: camera-intent THUMBNAIL only (~10-20 KB), which is what keeps this
- * free of Firebase Storage, a FileProvider and the CAMERA permission. Swap in
+ * free of file storage, a FileProvider and the CAMERA permission. Swap in
  * Storage + an upload URL if full-resolution photos are ever needed.
  */
 public final class Photo {

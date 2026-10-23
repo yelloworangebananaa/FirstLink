@@ -120,6 +120,20 @@ struct StaffDashboardView: View {
                 }
             }
 
+            // Planning, not a live queue — organizer only, so attendees and staff never
+            // see a screen that edits the event.
+            if store.isOrganizer {
+                Section("Preparedness") {
+                    NavigationRow(title: "ReadyMap",
+                                  subtitle: "Spot coverage gaps before anything happens",
+                                  systemImage: "map",
+                                  count: readyMapGaps,
+                                  tint: .pending) {
+                        path.append(.readyMap)
+                    }
+                }
+            }
+
             Section {
                 Button("End Event", systemImage: "stop.circle", role: .destructive) {
                     confirmEndEvent = true
@@ -146,12 +160,19 @@ struct StaffDashboardView: View {
             Text("Join codes stop working and every device signs out. This cannot be undone.")
         }
     }
+
+    /// Places with neither a posted responder nor an AED.
+    private var readyMapGaps: Int {
+        guard let event = store.event else { return 0 }
+        return ReadyMap.coverage(event, store.participants).filter { $0.level == .gap }.count
+    }
 }
 
 /// List row that carries an unresolved count. Law of Similarity: both live queues use
 /// the same row, so the badge means the same thing in both places.
 struct NavigationRow: View {
     var title: String
+    var subtitle: String? = nil
     var systemImage: String
     var count: Int
     var tint: Color
@@ -160,8 +181,19 @@ struct NavigationRow: View {
     var body: some View {
         Button(action: action) {
             HStack {
-                Label(title, systemImage: systemImage)
-                    .foregroundStyle(.primary)
+                Label {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(title)
+                        if let subtitle {
+                            Text(subtitle)
+                                .font(.footnote)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                } icon: {
+                    Image(systemName: systemImage)
+                }
+                .foregroundStyle(.primary)
                 Spacer()
                 if count > 0 {
                     Text("\(count)")

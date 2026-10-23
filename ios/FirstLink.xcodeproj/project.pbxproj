@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F100000000000000000000C4 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = F100000000000000000000C2 /* FirebaseAuth */; };
-		F100000000000000000000C5 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = F100000000000000000000C3 /* FirebaseFirestore */; };
+		F100000000000000000000C4 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = F100000000000000000000C2 /* Supabase */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,8 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F100000000000000000000C4 /* FirebaseAuth in Frameworks */,
-				F100000000000000000000C5 /* FirebaseFirestore in Frameworks */,
+				F100000000000000000000C4 /* Supabase in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -72,8 +70,7 @@
 			);
 			name = FirstLink;
 			packageProductDependencies = (
-				F100000000000000000000C2 /* FirebaseAuth */,
-				F100000000000000000000C3 /* FirebaseFirestore */,
+				F100000000000000000000C2 /* Supabase */,
 			);
 			productName = FirstLink;
 			productReference = F100000000000000000000A5 /* FirstLink.app */;
@@ -104,7 +101,7 @@
 			mainGroup = F100000000000000000000A2;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				F100000000000000000000C1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				F100000000000000000000C1 /* XCRemoteSwiftPackageReference "supabase-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F100000000000000000000A3 /* Products */;
@@ -278,26 +275,21 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		F100000000000000000000C1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+		F100000000000000000000C1 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			repositoryURL = "https://github.com/supabase/supabase-swift";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 11.0.0;
+				minimumVersion = 2.55.4;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		F100000000000000000000C2 /* FirebaseAuth */ = {
+		F100000000000000000000C2 /* Supabase */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = F100000000000000000000C1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAuth;
-		};
-		F100000000000000000000C3 /* FirebaseFirestore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F100000000000000000000C1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseFirestore;
+			package = F100000000000000000000C1 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

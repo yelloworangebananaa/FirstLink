@@ -6,10 +6,9 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
+        android:name=".FirstLinkApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -19,9 +18,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FirstLink"
         tools:targetApi="31">
-        <activity
-            android:name=".VenuePickerActivity"
-            android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -44,6 +40,8 @@
         <activity android:name=".AttendeeMainDashboardActivity" />
         <activity android:name=".AttendeeEmergencyActivity" />
         <activity android:name=".AttendeeHelpActivity" />
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".ReadyMapActivity" />
         <activity
             android:name=".EmergencyResponderAlertActivity"
             android:exported="false" />

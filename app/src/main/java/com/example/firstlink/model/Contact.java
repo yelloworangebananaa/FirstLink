@@ -3,7 +3,7 @@ package com.example.firstlink.model;
 /**
  * "Water problem — Dana Reyes, code WX7Q2A".
  *
- * Its own collection rather than a map on the event, because the join screen has to
+ * Its own table rather than a map on the event, because the join screen has to
  * find an event from nothing but a code — an equality query on one field, the same
  * shape as the attendee and staff code lookups.
  */
@@ -14,10 +14,6 @@ public class Contact {
     private String problem;
     private String person;
     private String code;
-
-    /** Required by Firestore's object mapper. */
-    public Contact() {
-    }
 
     public Contact(String eventId, String problem, String person, String code) {
         this.eventId = eventId;

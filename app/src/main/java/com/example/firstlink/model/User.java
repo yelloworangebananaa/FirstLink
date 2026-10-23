@@ -8,7 +8,7 @@ public class User {
     public static final String ROLE_STAFF = "staff";
     public static final String ROLE_ATTENDEE = "attendee";
 
-    /** Firebase Auth uid — stable per install, and the id of this user's document. */
+    /** Anonymous auth uid — stable per install, and the id of this user's row. */
     private String id;
     private String eventId;
     private String role;
@@ -17,11 +17,6 @@ public class User {
     private boolean qualifiedResponder;
     /** Set when they joined with a contact code: the problem they are on the hook for. */
     private String contactFor;
-
-    /** Required by Firestore's object mapper. */
-    public User() {
-        this.qualifications = new ArrayList<>();
-    }
 
     public User(String eventId, String role) {
         this.eventId = eventId;

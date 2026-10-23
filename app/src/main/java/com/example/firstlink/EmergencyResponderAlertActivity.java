@@ -20,9 +20,8 @@ import java.util.List;
 
 /**
  * The alert a qualified responder receives. Opened from the local
- * notification (or by tapping an Active emergency in the staff list).
- * In the Firebase version this screen is opened by an FCM data message
- * delivered to every subscribed responder device.
+ * notification (or by tapping an Active emergency in the staff list),
+ * which this phone raises itself from the realtime listener.
  */
 public class EmergencyResponderAlertActivity extends BaseActivity {
 
@@ -62,7 +61,7 @@ public class EmergencyResponderAlertActivity extends BaseActivity {
         String description = emergency.getDescription();
         descriptionText.setText(description == null || description.isEmpty()
                 ? "No description provided" : description);
-        statusText.setText(emergency.getConsciousness() + " • " + emergency.getBreathing());
+        statusText.setText(emergency.patientStatus());
         timeText.setText("Reported at " + DateFormat.getTimeInstance(DateFormat.SHORT)
                 .format(new Date(emergency.getTimestamp())));
         Photo.show((ImageView) findViewById(R.id.alert_photo), emergency.getPhoto());
@@ -73,7 +72,7 @@ public class EmergencyResponderAlertActivity extends BaseActivity {
 
         // Someone else accepting does not close this screen — several responders may
         // take the same emergency. Only MY own acceptance hides the accept button.
-        if (repo.acceptedByMe(emergency.getAcceptedUids())) {
+        if (repo.acceptedByMe(emergency)) {
             showAcceptedState();
         }
 

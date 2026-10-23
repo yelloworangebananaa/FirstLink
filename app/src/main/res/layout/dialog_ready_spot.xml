@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ReadyMap place editor. Hick: equipment, who is posted, and the drill - nothing else.
+     Every control writes through the repository the moment it changes. -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp">
+
+        <LinearLayout
+            style="@style/SettingsGroup"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp">
+
+            <com.example.firstlink.widget.DraggableSwitchMaterial
+                android:id="@+id/ready_spot_aed_switch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:minHeight="44dp"
+                android:paddingStart="16dp"
+                android:paddingTop="11dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="11dp"
+                android:text="AED here"
+                android:textColor="@color/text_primary"
+                android:textSize="17sp"
+                app:thumbTint="@color/switch_thumb_tint"
+                app:trackTint="@color/switch_track_tint"
+                app:useMaterialThemeColors="false" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/bg_ios_separator" />
+
+            <com.example.firstlink.widget.DraggableSwitchMaterial
+                android:id="@+id/ready_spot_first_aid_switch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:minHeight="44dp"
+                android:paddingStart="16dp"
+                android:paddingTop="11dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="11dp"
+                android:text="First-aid kit here"
+                android:textColor="@color/text_primary"
+                android:textSize="17sp"
+                app:thumbTint="@color/switch_thumb_tint"
+                app:trackTint="@color/switch_track_tint"
+                app:useMaterialThemeColors="false" />
+        </LinearLayout>
+
+        <TextView
+            style="@style/SettingsHeader"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="32dp"
+            android:text="Responders posted here" />
+
+        <!-- Rows are filled by ReadyMapActivity. -->
+        <LinearLayout
+            android:id="@+id/ready_spot_responder_list"
+            style="@style/SettingsGroup"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <com.example.firstlink.widget.DraggableMaterialButton
+            android:id="@+id/ready_spot_drill_button"
+            style="@style/Widget.FirstLink.Button.Outlined"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="16dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:text="Run drill here"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:icon="@drawable/ic_sf_figure_run"
+            app:iconGravity="textStart"
+            app:iconPadding="8dp"
+            app:iconSize="18dp" />
+    </LinearLayout>
+</ScrollView>

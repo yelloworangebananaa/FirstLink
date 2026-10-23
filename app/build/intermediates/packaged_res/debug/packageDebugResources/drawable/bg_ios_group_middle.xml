@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Middle slice of a grouped liquid-glass panel. -->
-<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
-    <gradient android:angle="270" android:endColor="@color/glass_sheen_bottom" android:startColor="@color/glass_sheen_top" android:type="linear" />
-</shape>

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class EmergencyRequest {
+public class EmergencyRequest implements Report {
     public static final String STATUS_ACTIVE = "Active";
     public static final String STATUS_RESPONDER_ASSIGNED = "Responder Assigned";
     public static final String STATUS_RESOLVED = "Resolved";
@@ -15,10 +15,13 @@ public class EmergencyRequest {
     public static final String APPROVAL_APPROVED = "Approved";
     public static final String APPROVAL_DENIED = "Denied";
 
+    /** Where a 911 call request stands. Screens switch on this, never on the strings. */
+    public enum Approval { NOT_REQUESTED, PENDING, APPROVED, DENIED }
+
     private String id;
     private String eventId;
     private String reporterRole;
-    /** Firebase Auth uid, so the reporting device can recognise its own reports. */
+    /** Anonymous auth uid, so the reporting device can recognise its own reports. */
     private String reporterUid;
     private String callApprovalStatus;
     private String location;
@@ -35,7 +38,7 @@ public class EmergencyRequest {
     /** Base64 JPEG thumbnail from the camera, or null. */
     private String photo;
 
-    /** Required by Firestore's object mapper. */
+    /** Empty shell the repository fills from a database row. */
     public EmergencyRequest() {
     }
 
@@ -151,6 +154,20 @@ public class EmergencyRequest {
         this.callApprovalStatus = callApprovalStatus;
     }
 
+    public Approval approval() {
+        switch (getCallApprovalStatus()) {
+            case APPROVAL_PENDING: return Approval.PENDING;
+            case APPROVAL_APPROVED: return Approval.APPROVED;
+            case APPROVAL_DENIED: return Approval.DENIED;
+            default: return Approval.NOT_REQUESTED;
+        }
+    }
+
+    @Override
+    public String senderUid() {
+        return reporterUid;
+    }
+
     public List<String> getAcceptedBy() {
         if (acceptedBy == null) acceptedBy = new ArrayList<>();
         return acceptedBy;
@@ -175,5 +192,16 @@ public class EmergencyRequest {
 
     public void setPhoto(String photo) {
         this.photo = photo;
+    }
+
+    /** "Unconscious • Breathing", skipping whatever the reporter left unanswered. */
+    public String patientStatus() {
+        StringBuilder out = new StringBuilder();
+        for (String part : new String[]{consciousness, breathing}) {
+            if (part == null || part.trim().isEmpty()) continue;
+            if (out.length() > 0) out.append(" • ");
+            out.append(part);
+        }
+        return out.length() == 0 ? "Patient status not given" : out.toString();
     }
 }

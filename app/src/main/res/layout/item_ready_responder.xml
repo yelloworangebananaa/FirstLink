@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Checklist row in the place editor, same accessory checkmark as QualificationsView. -->
+<CheckBox xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:button="@null"
+    android:drawableEnd="@drawable/bg_ios_check"
+    android:drawablePadding="12dp"
+    android:gravity="center_vertical"
+    android:minHeight="44dp"
+    android:paddingStart="16dp"
+    android:paddingTop="8dp"
+    android:paddingEnd="16dp"
+    android:paddingBottom="8dp"
+    android:textColor="@color/text_primary"
+    android:textSize="17sp" />

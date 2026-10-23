@@ -16,12 +16,11 @@ import com.example.firstlink.EmergencyResponderAlertActivity;
 import com.example.firstlink.StaffViewHelpActivity;
 
 /**
- * Local notifications for the single-device demo.
+ * Local notifications, raised by this phone when its realtime listener sees a change.
  *
- * Alerting OTHER phones is impossible without a backend: in the Firebase
- * version these notifications are produced by Firebase Cloud Messaging —
- * a Cloud Function pushes to the event's responder/staff topics and this
- * class is only kept for rendering the received message.
+ * Waking a phone whose app is not running needs push messages: a server
+ * function would push to the event's responders/staff and this class
+ * would only render the received message.
  */
 public class NotificationHelper {
 

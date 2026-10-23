@@ -1,14 +1,18 @@
 import SwiftUI
-import FirebaseCore
 import UserNotifications
 
 @main
 struct FirstLinkApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some Scene {
         WindowGroup {
             RootView()
+        }
+        // The realtime socket drops while backgrounded; catch up on whatever changed.
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active { Task { await Store.shared.refreshAll() } }
         }
     }
 }
@@ -17,34 +21,12 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
 
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions options: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
-        configureFirebase()
         UNUserNotificationCenter.current().delegate = self
         Notifications.requestPermission()
 
-        // Sign in early so the first Firestore call doesn't have to wait.
+        // Sign in early so the first backend call doesn't have to wait.
         Task { try? await Store.shared.signIn() }
         return true
-    }
-
-    /// The real plist wins whenever it is present, so dropping it in later needs no
-    /// code change — this branch simply stops running.
-    private func configureFirebase() {
-        if Bundle.main.path(forResource: "GoogleService-Info", ofType: "plist") != nil {
-            FirebaseApp.configure()
-            return
-        }
-        // ponytail: stopgap for running before the iOS app is registered in the Firebase
-        // console. Auth and Firestore authenticate on apiKey + projectID, which are the
-        // Android app's and work as-is. The app ID hash is a placeholder — FirebaseCore
-        // checks only that it is ":ios:" plus hex and cannot verify the hash itself.
-        // Ceiling: Installations, Analytics, Crashlytics and FCM will not work against an
-        // unregistered app id, and none of them are used here. Upgrade path: register the
-        // iOS app and drop GoogleService-Info.plist into ios/FirstLink/.
-        let options = FirebaseOptions(googleAppID: "1:868678133174:ios:0000000000000000",
-                                      gcmSenderID: "868678133174")
-        options.apiKey = "AIzaSyBU_RWB9dr5mYRuv7hmEtP2AEGPsmcgwA8"
-        options.projectID = "firstlink-93faf"
-        FirebaseApp.configure(options: options)
     }
 
     /// Emergency alerts have to be visible even with the app open — the responder
@@ -77,6 +59,7 @@ enum Route: Hashable {
     case helpList
     case responderAlert(String)
     case settings
+    case readyMap
 }
 
 /// One navigation stack for the whole app. The screen at the bottom of it is decided
@@ -103,6 +86,7 @@ struct RootView: View {
                     case .helpList: HelpListView()
                     case .responderAlert(let id): ResponderAlertView(emergencyId: id)
                     case .settings: SettingsView()
+                    case .readyMap: ReadyMapView()
                     }
                 }
         }

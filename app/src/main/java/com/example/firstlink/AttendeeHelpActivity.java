@@ -14,7 +14,6 @@ import androidx.annotation.Nullable;
 
 import com.example.firstlink.data.FirstLinkRepository;
 import com.example.firstlink.model.Contact;
-import com.example.firstlink.model.User;
 import com.example.firstlink.util.Photo;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
@@ -105,7 +104,14 @@ public class AttendeeHelpActivity extends BaseActivity {
         Photo.show(photoPreview, photo);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Dashboards.bailOutIfEventGone(this);
+    }
+
     private void sendHelpRequest() {
+        if (Dashboards.bailOutIfEventGone(this)) return;
         String description = descriptionInput.getText().toString().trim();
         String problem = selectedProblem();
         // A tapped preset says enough on its own, so it stands in for the description.
@@ -119,16 +125,9 @@ public class AttendeeHelpActivity extends BaseActivity {
         repo.addHelpRequest(location, description.isEmpty() ? problem : description,
                 problem, photo);
 
-        // Staff devices raise their own notification from the Firestore listener.
+        // Staff devices raise their own notification from the realtime listener.
         Toast.makeText(this, "Help request sent to staff", Toast.LENGTH_LONG).show();
 
-        User user = repo.getCurrentUser();
-        Class<?> target = (user != null && user.isStaffLevel())
-                ? StaffDashboardActivity.class
-                : AttendeeMainDashboardActivity.class;
-        Intent intent = new Intent(this, target);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivity(intent);
-        finish();
+        Dashboards.returnTo(this);
     }
 }

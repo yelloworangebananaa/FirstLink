@@ -53,8 +53,7 @@ public class EmergencyAdapter extends RecyclerView.Adapter<EmergencyAdapter.View
         final EmergencyRequest emergency = emergencies.get(position);
 
         holder.location.setText(emergency.getLocation());
-        holder.patientStatus.setText(
-                emergency.getConsciousness() + " • " + emergency.getBreathing());
+        holder.patientStatus.setText(emergency.patientStatus());
         String description = emergency.getDescription();
         holder.description.setText(description == null || description.isEmpty()
                 ? "No description provided" : description);
@@ -97,23 +96,23 @@ public class EmergencyAdapter extends RecyclerView.Adapter<EmergencyAdapter.View
      * gets the buttons; everyone else just sees where the request stands.
      */
     private void bindApproval(ViewHolder holder, final EmergencyRequest emergency) {
-        String approval = emergency.getCallApprovalStatus();
+        EmergencyRequest.Approval approval = emergency.approval();
 
-        if (EmergencyRequest.APPROVAL_NOT_REQUESTED.equals(approval)) {
+        if (approval == EmergencyRequest.Approval.NOT_REQUESTED) {
             holder.approvalStatus.setVisibility(View.GONE);
             holder.approvalButtons.setVisibility(View.GONE);
             return;
         }
 
         holder.approvalStatus.setVisibility(View.VISIBLE);
-        boolean pending = EmergencyRequest.APPROVAL_PENDING.equals(approval);
+        boolean pending = approval == EmergencyRequest.Approval.PENDING;
 
         if (pending) {
             holder.approvalStatus.setText(isOrganizer
                     ? "911 call requested — your approval needed"
                     : "911 call: waiting for organizer approval");
             holder.approvalStatus.setTextColor(0xFFB45309);
-        } else if (EmergencyRequest.APPROVAL_APPROVED.equals(approval)) {
+        } else if (approval == EmergencyRequest.Approval.APPROVED) {
             holder.approvalStatus.setText("911 call approved");
             holder.approvalStatus.setTextColor(0xFF16A34A);
         } else {

@@ -14,8 +14,6 @@ import android.widget.Toast;
 
 import com.example.firstlink.data.FirstLinkRepository;
 import com.example.firstlink.model.EmergencyRequest;
-import com.example.firstlink.model.Event;
-import com.example.firstlink.model.User;
 import com.example.firstlink.util.Dialer;
 import com.example.firstlink.util.GlassBlur;
 import com.example.firstlink.util.Photo;
@@ -39,6 +37,7 @@ public class AttendeeEmergencyActivity extends BaseActivity {
     private FirstLinkRepository repo;
     private String awaitingApprovalId;
     private AlertDialog waitingDialog;
+    private MaterialButton sendButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +51,7 @@ public class AttendeeEmergencyActivity extends BaseActivity {
         consciousnessGroup = findViewById(R.id.attendee_emergency_consciousness_group);
         breathingGroup = findViewById(R.id.attendee_emergency_breathing_group);
         photoPreview = findViewById(R.id.attendee_emergency_photo_preview);
-        MaterialButton sendButton = findViewById(R.id.attendee_emergency_send_button);
+        sendButton = findViewById(R.id.attendee_emergency_send_button);
         MaterialButton photoButton = findViewById(R.id.attendee_emergency_photo_button);
 
         photoButton.setOnClickListener(new View.OnClickListener() {
@@ -79,6 +78,7 @@ public class AttendeeEmergencyActivity extends BaseActivity {
     }
 
     private void sendEmergency() {
+        if (Dashboards.bailOutIfEventGone(this)) return;
         if (locationSpinner.getSelectedItemPosition() <= 0) {
             Toast.makeText(this, "Select a location", Toast.LENGTH_SHORT).show();
             return;
@@ -97,13 +97,29 @@ public class AttendeeEmergencyActivity extends BaseActivity {
         String location = locationSpinner.getSelectedItem().toString();
         String description = descriptionInput.getText().toString().trim();
 
-        EmergencyRequest request =
-                repo.addEmergency(location, description, consciousness, breathing, photo);
+        sendButton.setEnabled(false);
+        repo.addEmergency(location, description, consciousness, breathing, photo, (request, ok) -> {
+            sendButton.setEnabled(true);
+            if (ok) {
+                // No notification for the reporter — they are standing right here. Every other
+                // device raises its own alert from the realtime listener in the repository.
+                showConfirmation(request);
+            } else {
+                showNotSent();
+            }
+        });
+    }
 
-        // No notification for the reporter — they are standing right here. Every other
-        // device raises its own alert from the Firestore listener in the repository.
-
-        showConfirmation(request);
+    private void showNotSent() {
+        GlassBlur.behindDialog(new MaterialAlertDialogBuilder(this)
+                .setTitle("Not sent")
+                .setCancelable(false)
+                .setMessage("Your report did not reach the server. "
+                        + "If someone is in danger, call 911 now.")
+                .setNegativeButton("Retry", (dialog, which) -> sendEmergency())
+                .setPositiveButton("Call 911", (dialog, which) ->
+                        Dialer.confirmAndDial911(AttendeeEmergencyActivity.this))
+                .show());
     }
 
     @Override
@@ -131,10 +147,7 @@ public class AttendeeEmergencyActivity extends BaseActivity {
     }
 
     private void showConfirmation(EmergencyRequest request) {
-        Event event = repo.getEvent();
-        boolean approvalRequired = event != null && event.isRequire911Approval();
-
-        if (approvalRequired) {
+        if (repo.needsApprovalBeforeCalling()) {
             requestOrganizerCallApproval(request);
             return;
         }
@@ -162,7 +175,7 @@ public class AttendeeEmergencyActivity extends BaseActivity {
     /**
      * This event requires the organizer to approve a 911 call. Ask, then wait —
      * the organizer answers from their emergency list on their own device, and the
-     * answer arrives here through the Firestore listener.
+     * answer arrives here through the realtime listener.
      */
     private void requestOrganizerCallApproval(EmergencyRequest request) {
         awaitingApprovalId = request.getId();
@@ -189,8 +202,8 @@ public class AttendeeEmergencyActivity extends BaseActivity {
         EmergencyRequest e = repo.getEmergencyById(awaitingApprovalId);
         if (e == null) return;
 
-        String approval = e.getCallApprovalStatus();
-        if (EmergencyRequest.APPROVAL_APPROVED.equals(approval)) {
+        EmergencyRequest.Approval approval = e.approval();
+        if (approval == EmergencyRequest.Approval.APPROVED) {
             awaitingApprovalId = null;
             dismissWaitingDialog();
             GlassBlur.behindDialog(new MaterialAlertDialogBuilder(this)
@@ -210,7 +223,7 @@ public class AttendeeEmergencyActivity extends BaseActivity {
                         }
                     })
                     .show());
-        } else if (EmergencyRequest.APPROVAL_DENIED.equals(approval)) {
+        } else if (approval == EmergencyRequest.Approval.DENIED) {
             awaitingApprovalId = null;
             dismissWaitingDialog();
             GlassBlur.behindDialog(new MaterialAlertDialogBuilder(this)
@@ -238,6 +251,7 @@ public class AttendeeEmergencyActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (Dashboards.bailOutIfEventGone(this)) return;
         repo.setOnChangeListener(new Runnable() {
             @Override
             public void run() {
@@ -253,13 +267,6 @@ public class AttendeeEmergencyActivity extends BaseActivity {
     }
 
     private void returnToDashboard() {
-        User user = repo.getCurrentUser();
-        Class<?> target = (user != null && user.isStaffLevel())
-                ? StaffDashboardActivity.class
-                : AttendeeMainDashboardActivity.class;
-        Intent intent = new Intent(this, target);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivity(intent);
-        finish();
+        Dashboards.returnTo(this);
     }
 }

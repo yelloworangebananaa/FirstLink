@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class HelpRequest {
+public class HelpRequest implements Report {
     public static final String STATUS_OPEN = "Open";
     public static final String STATUS_IN_PROGRESS = "In Progress";
     public static final String STATUS_RESOLVED = "Resolved";
@@ -17,7 +17,7 @@ public class HelpRequest {
     private String problem;
     /** Base64 JPEG thumbnail from the camera, or null. */
     private String photo;
-    /** Firebase Auth uid of whoever sent it, so their device can recognise its own request. */
+    /** Anonymous auth uid of whoever sent it, so their device can recognise its own request. */
     private String requesterUid;
     /** Display names of every staff member who accepted. More than one may accept. */
     private List<String> acceptedBy;
@@ -26,7 +26,7 @@ public class HelpRequest {
     private long timestamp;
     private String status;
 
-    /** Required by Firestore's object mapper. */
+    /** Empty shell the repository fills from a database row. */
     public HelpRequest() {
     }
 
@@ -96,6 +96,11 @@ public class HelpRequest {
 
     public void setRequesterUid(String requesterUid) {
         this.requesterUid = requesterUid;
+    }
+
+    @Override
+    public String senderUid() {
+        return requesterUid;
     }
 
     public List<String> getAcceptedBy() {

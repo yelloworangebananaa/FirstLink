@@ -1,6 +1,5 @@
 package com.example.firstlink;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
@@ -9,7 +8,6 @@ import android.widget.Toast;
 
 
 import com.example.firstlink.data.FirstLinkRepository;
-import com.example.firstlink.model.User;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
@@ -98,11 +96,6 @@ public class QualificationsActivity extends BaseActivity {
     }
 
     private void goToDashboard() {
-        User user = FirstLinkRepository.get(this).getCurrentUser();
-        Class<?> target = (user != null && user.isStaffLevel())
-                ? StaffDashboardActivity.class
-                : AttendeeMainDashboardActivity.class;
-        startActivity(new Intent(this, target));
-        finish();
+        Dashboards.returnTo(this);
     }
 }

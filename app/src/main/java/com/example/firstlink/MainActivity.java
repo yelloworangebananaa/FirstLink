@@ -26,18 +26,27 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+        findViewById(R.id.home_settings_button).setOnClickListener(
+                v -> startActivity(new Intent(this, SettingsActivity.class)));
         join_event_main_page = findViewById(R.id.join_btn);
         create_event_main_page = findViewById(R.id.create_btn);
 
         requestNotificationPermissionIfNeeded();
 
-        // Sign in early so the first Firestore call doesn't have to wait.
-        FirstLinkRepository.get(this).ensureSignedIn()
-                .addOnFailureListener(e -> {
-                    Log.e("FirstLink", "sign-in failed: " + e.getMessage());
-                    Toast.makeText(this, "Cannot reach FirstLink servers.",
-                            Toast.LENGTH_LONG).show();
-                });
+        // Sign in early so the first backend call doesn't have to wait.
+        FirstLinkRepository.get(this).ensureSignedIn(error -> {
+            if (error == null) return;
+            Log.e("FirstLink", "sign-in failed: " + error);
+            Toast.makeText(this, "Cannot reach FirstLink servers.",
+                    Toast.LENGTH_LONG).show();
+        });
+
+        // Reopening the app mid-event goes straight back to that event, like the iOS app.
+        // An ended event is caught by the dashboard, which clears the session and comes back.
+        if (savedInstanceState == null && FirstLinkRepository.get(this).getCurrentUser() != null) {
+            Dashboards.returnTo(this);
+            return;
+        }
 
         join_event_main_page.setOnClickListener(new View.OnClickListener() {
             @Override

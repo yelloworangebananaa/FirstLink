@@ -2,8 +2,8 @@ import SwiftUI
 import UIKit
 import UserNotifications
 
-/// Local notifications, raised by the device's own Firestore listener when someone
-/// else reports something. See Store.alertIfNeeded for why this works without FCM.
+/// Local notifications, raised by the device's own realtime listener when someone
+/// else reports something. See Store.raise for why this works without push.
 enum Notifications {
 
     static let emergencyIdKey = "emergency_id"
@@ -25,11 +25,20 @@ enum Notifications {
         post(content)
     }
 
-    /// Notification for staff about a new non-emergency help request.
-    static func help(description: String) {
+    /// A new non-emergency help request, for staff or the named contact for its problem.
+    static func help(title: String, body: String) {
         let content = UNMutableNotificationContent()
-        content.title = "New help request"
-        content.body = description
+        content.title = title
+        content.body = body
+        content.sound = .default
+        post(content)
+    }
+
+    /// Tells the person who reported something that someone has taken it on.
+    static func accepted(by name: String, noun: String) {
+        let content = UNMutableNotificationContent()
+        content.title = "Help is on the way"
+        content.body = "\(name) accepted your \(noun)."
         content.sound = .default
         post(content)
     }

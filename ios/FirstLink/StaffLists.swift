@@ -104,8 +104,9 @@ struct EmergencyCard: View {
                     .font(.subheadline)
             }
 
-            if let responder = emergency.assignedResponderName, !responder.trimmed.isEmpty {
-                Label("Accepted by \(responder)", systemImage: "person.fill.checkmark")
+            if !emergency.accepters.isEmpty {
+                Label("Accepted by \(emergency.accepters.joined(separator: ", "))",
+                      systemImage: "person.fill.checkmark")
                     .font(.footnote.weight(.medium))
                     .foregroundStyle(.resolved)
             } else if emergency.status == EmergencyRequest.statusActive {
@@ -141,10 +142,10 @@ struct EmergencyCard: View {
     /// buttons; everyone else just sees where the request stands.
     @ViewBuilder
     private var approvalSection: some View {
-        let approval = emergency.callApprovalStatus
-        if approval != EmergencyRequest.approvalNotRequested {
+        let approval = emergency.approval
+        if approval != .notRequested {
             Divider()
-            if approval == EmergencyRequest.approvalPending {
+            if approval == .pending {
                 if isOrganizer {
                     Text("911 call requested — your approval needed")
                         .font(.footnote.weight(.semibold))
@@ -164,7 +165,7 @@ struct EmergencyCard: View {
                         .font(.footnote)
                         .foregroundStyle(.pending)
                 }
-            } else if approval == EmergencyRequest.approvalApproved {
+            } else if approval == .approved {
                 Label("911 call approved", systemImage: "checkmark.seal.fill")
                     .font(.footnote.weight(.semibold))
                     .foregroundStyle(.resolved)
@@ -190,11 +191,30 @@ struct HelpListView: View {
                           systemImage: "mappin.circle")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
+                    if let contact = store.contactPerson(for: request.problem) {
+                        Label("Contact: \(contact)", systemImage: "person.crop.circle")
+                            .font(.subheadline)
+                    }
+                    if !request.accepters.isEmpty {
+                        Label("Accepted by \(request.accepters.joined(separator: ", "))",
+                              systemImage: "person.fill.checkmark")
+                            .font(.footnote.weight(.medium))
+                            .foregroundStyle(.resolved)
+                    }
                     Text(shortTime(request.date))
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
                 .padding(.vertical, 4)
+                .swipeActions(edge: .leading) {
+                    // Others may still join in — only people already on it lose the action.
+                    if !store.acceptedByMe(request) {
+                        Button("Accept", systemImage: "hand.raised.fill") {
+                            store.acceptHelpRequest(request.id)
+                        }
+                        .tint(.blue)
+                    }
+                }
                 .swipeActions(edge: .trailing) {
                     Button("Resolve", systemImage: "checkmark.circle.fill") {
                         store.resolveHelpRequest(request.id)
@@ -244,7 +264,9 @@ struct ResponderAlertView: View {
 
     @ViewBuilder
     private func content(_ e: EmergencyRequest) -> some View {
-        let accepted = e.status != EmergencyRequest.statusActive
+        // Several responders may take the same emergency, so only MY acceptance
+        // hides the accept button — same as the Android app.
+        let accepted = store.acceptedByMe(e)
 
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
@@ -326,8 +348,9 @@ struct ResponderAlertView: View {
     }
 
     private func acceptedBy(_ e: EmergencyRequest) -> String {
-        let name = e.assignedResponderName?.trimmed ?? ""
-        return name.isEmpty ? "Nobody has accepted yet" : "Accepted by \(name)"
+        e.accepters.isEmpty
+            ? "Nobody has accepted yet"
+            : "Accepted by \(e.accepters.joined(separator: ", "))"
     }
 }
 

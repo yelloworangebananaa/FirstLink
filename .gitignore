@@ -12,6 +12,7 @@ local.properties
 
 # Generated files
 captures/
+graphify-out/
 .externalNativeBuild/
 .cxx/
 
@@ -35,3 +36,7 @@ xcuserdata/
 *.xcuserstate
 DerivedData/
 .DS_Store
+
+# Generated build output (contains machine paths)
+/build/
+/app/build/

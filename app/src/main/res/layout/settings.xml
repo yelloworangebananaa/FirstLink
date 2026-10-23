@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SettingsView: grouped sections for appearance, alerts and the current event. -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_page_glass"
+    android:fitsSystemWindows="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="40dp">
+
+        <!-- Nav bar, 44dp. -->
+        <ImageButton
+            android:id="@+id/back_button"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Back"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_back"
+            app:tint="@color/brand_primary" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="20dp"
+            android:text="Settings"
+            android:textColor="@color/text_primary"
+            android:textSize="34sp"
+            android:textStyle="bold" />
+
+        <!-- Appearance -->
+        <TextView
+            style="@style/SettingsHeader"
+            android:text="Appearance" />
+
+        <LinearLayout
+            style="@style/SettingsGroup"
+            android:padding="12dp">
+
+            <com.example.firstlink.widget.DraggableRadioGroup
+                android:id="@+id/settings_appearance_group"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:background="@drawable/bg_ios_seg_track"
+                android:orientation="horizontal"
+                android:padding="2dp">
+
+                <RadioButton
+                    android:id="@+id/settings_appearance_system"
+                    style="@style/SettingsSegment"
+                    android:text="System" />
+
+                <RadioButton
+                    android:id="@+id/settings_appearance_light"
+                    style="@style/SettingsSegment"
+                    android:text="Light" />
+
+                <RadioButton
+                    android:id="@+id/settings_appearance_dark"
+                    style="@style/SettingsSegment"
+                    android:text="Dark" />
+            </com.example.firstlink.widget.DraggableRadioGroup>
+        </LinearLayout>
+
+        <TextView
+            style="@style/SettingsFooter"
+            android:text="System follows your phone's dark theme setting." />
+
+        <!-- Notifications. Alerts are how a responder finds out at all, so a denied
+             permission is surfaced here rather than left to fail silently. -->
+        <TextView
+            style="@style/SettingsHeader"
+            android:text="Notifications" />
+
+        <LinearLayout style="@style/SettingsGroup">
+
+            <LinearLayout style="@style/SettingsRow">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Emergency alerts"
+                    android:textColor="@color/text_primary"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/settings_alerts_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/settings_open_system_settings"
+                style="@style/Widget.FirstLink.Button.Text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start|center_vertical"
+                android:paddingStart="16dp"
+                android:text="Open Phone Settings"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <TextView
+            style="@style/SettingsFooter"
+            android:text="With alerts off, this phone will not be told when someone reports an emergency, even if you are a qualified responder." />
+
+        <!-- Event: only shown while this phone is in one. -->
+        <LinearLayout
+            android:id="@+id/settings_event_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                style="@style/SettingsHeader"
+                android:text="Event" />
+
+            <LinearLayout style="@style/SettingsGroup">
+
+                <TextView
+                    android:id="@+id/settings_event_name"
+                    style="@style/SettingsValueRow" />
+
+                <TextView
+                    android:id="@+id/settings_event_venue"
+                    style="@style/SettingsValueRow" />
+
+                <TextView
+                    android:id="@+id/settings_event_role"
+                    style="@style/SettingsValueRow" />
+
+                <TextView
+                    android:id="@+id/settings_event_receiving"
+                    style="@style/SettingsValueRow"
+                    android:text="Receiving emergency alerts"
+                    android:textColor="@color/success"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

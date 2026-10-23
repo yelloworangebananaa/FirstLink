@@ -16,8 +16,7 @@
     android:background="@drawable/bg_page_glass"
     tools:context=".MainActivity">
 
-    <!-- Nav bar: 44dp tall, empty except the topBarTrailing settings item.
-         No Android activity handles Settings, so this is decorative only. -->
+    <!-- Nav bar: 44dp tall, empty except the topBarTrailing settings item. -->
     <ImageButton
         android:id="@+id/home_settings_button"
         android:layout_width="44dp"

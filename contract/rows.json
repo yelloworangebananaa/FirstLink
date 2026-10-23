@@ -1,0 +1,73 @@
+{
+  "events": [
+    {
+      "id": "e0000000-0000-4000-8000-000000000001",
+      "organizer_uid": "0a000000-0000-4000-8000-000000000001",
+      "name": "Game",
+      "venue_name": "Gym",
+      "organizer_name": "Org",
+      "require_911_approval": false,
+      "attendee_code": "ABC234",
+      "staff_code": "XYZ789",
+      "locations": ["Gym", "Lobby", "Field"],
+      "active": true,
+      "aed_locations": ["Gym", "Field"],
+      "first_aid_locations": ["Lobby"],
+      "responder_posts": {"nurse": "Gym", "staff": "Lobby", "gone": "Old Room"}
+    }
+  ],
+  "emergencies": [
+    {
+      "id": "e1000000-0000-4000-8000-000000000001",
+      "event_id": "e0000000-0000-4000-8000-000000000001",
+      "reporter_uid": "0f000000-0000-4000-8000-000000000001",
+      "reporter_role": "attendee",
+      "reporter_name": "Alex",
+      "call_approval_status": "Pending",
+      "location": "Main Hall",
+      "description": "Collapsed near stage",
+      "consciousness": "Unconscious",
+      "breathing": "Breathing",
+      "photo": null,
+      "status": "Responder Assigned",
+      "accepted_by": ["Dana"],
+      "accepted_uids": ["0d000000-0000-4000-8000-000000000001"],
+      "created_at": "2025-10-23T00:00:00.123456+00:00"
+    }
+  ],
+  "help_requests": [
+    {
+      "id": "e2000000-0000-4000-8000-000000000001",
+      "event_id": "e0000000-0000-4000-8000-000000000001",
+      "requester_uid": "0f000000-0000-4000-8000-000000000001",
+      "location": "Gym",
+      "description": "Leak by the door",
+      "problem": "Water problem",
+      "photo": null,
+      "status": "Open",
+      "accepted_by": [],
+      "accepted_uids": [],
+      "created_at": "2025-10-23T00:00:00+00:00"
+    }
+  ],
+  "users": [
+    {
+      "id": "0d000000-0000-4000-8000-000000000001",
+      "event_id": "e0000000-0000-4000-8000-000000000001",
+      "role": "staff",
+      "name": "Dana",
+      "qualifications": ["CPR Certified"],
+      "qualified_responder": true,
+      "contact_for": "Water problem"
+    }
+  ],
+  "contacts": [
+    {
+      "id": "e3000000-0000-4000-8000-000000000001",
+      "event_id": "e0000000-0000-4000-8000-000000000001",
+      "problem": "Water problem",
+      "person": "Dana Reyes",
+      "code": "K7PQ2M"
+    }
+  ]
+}

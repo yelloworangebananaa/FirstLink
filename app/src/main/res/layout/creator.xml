@@ -171,48 +171,23 @@
                     android:layout_marginStart="16dp"
                     android:background="@drawable/bg_ios_separator" />
 
-                <LinearLayout
-                    android:id="@+id/venue_picker_button"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/venue_name_submission"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:gravity="center_vertical"
-                    android:minHeight="64dp"
-                    android:orientation="horizontal"
+                    android:background="@null"
+                    android:gravity="start|center_vertical"
+                    android:hint="Venue"
+                    android:imeOptions="actionNext"
+                    android:inputType="textCapWords"
+                    android:minHeight="44dp"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
                     android:paddingTop="11dp"
-                    android:paddingBottom="11dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Venue"
-                        android:textColor="@color/text_primary"
-                        android:textSize="17sp" />
-
-                    <TextView
-                        android:id="@+id/venue_name_submission"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_weight="1"
-                        android:gravity="end|center_vertical"
-                        android:hint="Choose venue"
-                        android:textColor="@color/text_primary"
-                        android:textColorHint="@color/text_secondary"
-                        android:textSize="17sp" />
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginStart="8dp"
-                        android:contentDescription="Choose venue on map"
-                        android:src="@drawable/ic_sf_map_fill"
-                        android:tint="@color/brand_primary" />
-                </LinearLayout>
+                    android:paddingBottom="11dp"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_secondary"
+                    android:textSize="17sp" />
 
                 <View
                     android:layout_width="match_parent"
